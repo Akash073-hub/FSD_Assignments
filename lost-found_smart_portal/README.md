@@ -1,70 +1,106 @@
-# Getting Started with Create React App
+# FindHub Smart Lost & Found Portal
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+FindHub is a React-based campus lost-and-found portal for reporting found items, searching the item registry, verifying ownership, and submitting claims. The interface is designed around secure custody tracking across campus hubs.
+
+## Features
+
+- Login screen for campus users
+- FindHub home dashboard with item statistics and quick actions
+- Searchable reported-item directory with category, location, and date filters
+- Item details and ownership verification flow
+- Claim submission form with ownership declaration and validation
+- New item reporting form
+- Notifications for AI matches, custody updates, and claim verification
+- Responsive academic-style interface with shared navigation and custody status indicators
+
+## Application Routes
+
+| Route | Page |
+| --- | --- |
+| `/` | Login |
+| `/home` | FindHub dashboard |
+| `/search` | Reported items directory |
+| `/claim` | Claim and ownership verification |
+| `/report-item` | Report a found item |
+| `/notifications` | Notifications and custody updates |
+
+## Tech Stack
+
+- React 19
+- React Router
+- React Scripts / Create React App
+- Lucide React icons
+- Material Symbols for interface icons
+- CSS stylesheets organized by page
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm
+
+### Install dependencies
+
+From the `lost-found_smart_portal` directory:
+
+```bash
+npm install
+```
+
+### Start the development server
+
+```bash
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000) in a browser. The development server reloads when source files change.
 
 ## Available Scripts
 
-In the project directory, you can run:
-
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Starts the development server.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the React test runner in watch mode.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Creates an optimized production build in the `build` directory.
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Ejects the Create React App configuration. This is irreversible and is not required for normal development.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Project Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```text
+src/
+├── App.jsx              # Router and application entry routes
+├── Loginpage.jsx        # Campus login screen
+├── Findhubportal.jsx    # Home dashboard
+├── Searchpage.jsx       # Search and item directory
+├── Claimpage.jsx        # Ownership claim form
+├── Reportitem.jsx       # Found-item reporting form
+├── Notifications.jsx    # Notification and custody activity page
+├── *.css                # Page-specific styles
+├── index.js             # React DOM entry point
+└── setupTests.js        # Test setup
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## User Flow
 
-## Learn More
+1. Sign in from the login page.
+2. Use the home dashboard to search for an item or report a found item.
+3. Filter and browse reported items in the directory.
+4. Select **View Details & Claim** or **Verify Ownership** to open the claim page.
+5. Submit ownership information and the claim declaration for verification.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Build Verification
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To verify the application compiles successfully:
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm run build
+```
