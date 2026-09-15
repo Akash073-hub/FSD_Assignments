@@ -1,0 +1,705 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700,800&f[]=general-sans@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'General Sans', sans-serif;
+  background: #f8f9fa;
+  color: #111;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4,.rp-brand-name,.rp-footer-name,.rp-camera-title,.rp-gallery-title,.rp-form-title,.rp-nav-link,.rp-viewport-title,.rp-custody-title {
+  font-family: 'Clash Display', sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-style: normal; font-weight: normal;
+  display: inline-block; line-height: 1;
+  text-transform: none; white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+}
+
+.rp-fill { font-variation-settings: 'FILL' 1 !important; }
+
+/* ══════════════════════
+   HEADER
+══════════════════════ */
+.rp-header {
+  background: #111315;
+  color: #fff;
+  border-bottom: 1px solid #27272a;
+}
+
+.rp-header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rp-brand { display: flex; align-items: center; gap: 12px; }
+
+.rp-brand-icon {
+  width: 40px; height: 40px;
+  background: #111111;
+  border: 1px solid rgba(197,155,75,0.4);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.rp-brand-text { display: flex; flex-direction: column; }
+
+.rp-brand-row { display: flex; align-items: center; gap: 8px; line-height: 1; }
+
+.rp-brand-name {
+  font-size: 18px; font-weight: 700;
+  color: #fff; letter-spacing: -0.01em;
+}
+
+.rp-badge-academic {
+  background: #c59b4b;
+  color: #1a1b22;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 3px;
+  font-family: 'Clash Display', sans-serif;
+}
+
+.rp-brand-sub {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: #777; margin-top: 3px;
+}
+
+.rp-nav { display: flex; align-items: center; }
+
+.rp-nav-link {
+  position: relative;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600;
+  color: #fff; text-decoration: none;
+  letter-spacing: 0.04em;
+  padding-bottom: 6px;
+}
+
+.rp-nav-underline {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: #c59b4b;
+  border-radius: 99px;
+}
+
+.rp-header-right {
+  display: flex; align-items: center; gap: 8px;
+  border-left: 1px solid #27272a;
+  padding-left: 20px;
+}
+
+.rp-icon-btn {
+  position: relative;
+  padding: 6px; background: transparent; border: none;
+  color: #888; cursor: pointer; border-radius: 4px;
+  display: flex; align-items: center;
+  transition: color 0.15s;
+}
+.rp-icon-btn:hover { color: #fff; }
+
+.rp-notif-dot {
+  position: absolute; top: 4px; right: 4px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #c59b4b; border: 2px solid #111315;
+}
+
+.rp-avatar {
+  width: 36px; height: 36px; border-radius: 4px;
+  background: #c59b4b; color: #111;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 0 0 2px rgba(197,155,75,0.3);
+  margin-left: 4px;
+}
+
+/* ══════════════════════
+   SUB BAR
+══════════════════════ */
+.rp-subbar {
+  background: #c59b4b;
+  border-bottom: 1px solid rgba(163,123,48,0.3);
+}
+
+.rp-subbar-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 1.5rem; height: 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  color: #111;
+}
+
+.rp-subbar-left {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+
+.rp-subbar-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #111;
+}
+
+.rp-subbar-right {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* ══════════════════════
+   MAIN
+══════════════════════ */
+.rp-main {
+  flex: 1;
+  max-width: 1280px; width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.rp-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #777; margin-bottom: 16px;
+}
+
+.rp-breadcrumb a {
+  display: flex; align-items: center; gap: 4px;
+  color: #777; text-decoration: none;
+  transition: color 0.15s;
+}
+.rp-breadcrumb a:hover { color: #111; }
+.rp-breadcrumb span { color: #ccc; }
+.rp-breadcrumb-current { color: #111; font-weight: 600; }
+
+/* Page heading */
+.rp-page-heading {
+  display: flex; flex-direction: row;
+  align-items: flex-start; justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 20px; margin-bottom: 32px;
+}
+
+.rp-page-heading h1 {
+  font-size: 36px; font-weight: 800;
+  color: #111; letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.rp-page-heading p {
+  font-size: 14px; color: #666;
+  margin-top: 6px; line-height: 1.5; max-width: 560px;
+}
+
+.rp-heading-badges { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.rp-badge-outline {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 6px;
+  background: #f4f4f4; border: 1px solid #e0e0e0;
+  font-size: 11px; font-weight: 600;
+  font-family: 'Clash Display', sans-serif;
+  color: #333; white-space: nowrap;
+}
+
+/* ══════════════════════
+   GRID
+══════════════════════ */
+.rp-grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ══════════════════════
+   LEFT: CAMERA
+══════════════════════ */
+.rp-left { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.rp-camera-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.rp-camera-header {
+  background: #1a1a1a;
+  padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.rp-camera-header-left {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.rp-camera-title {
+  font-size: 13px; font-weight: 700;
+  color: #fff; letter-spacing: 0.03em;
+}
+
+.rp-camera-ready-badge {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 3px;
+  background: #2a2a2a; color: #bbb;
+  border: 1px solid #3a3a3a;
+  font-family: 'Clash Display', sans-serif;
+}
+
+.rp-switch-btn {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 500;
+  color: #aaa; background: #2a2a2a;
+  border: 1px solid #3a3a3a; border-radius: 4px;
+  padding: 6px 10px; cursor: pointer;
+  font-family: 'General Sans', sans-serif;
+  transition: background 0.15s, color 0.15s;
+}
+.rp-switch-btn:hover { background: #333; color: #fff; }
+
+/* Viewport */
+.rp-viewport {
+  position: relative;
+  background: #0a0a0a;
+  aspect-ratio: 4/3;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+.rp-viewport-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(20,20,20,0.6), rgba(10,10,10,0.4), #0a0a0a);
+}
+
+.rp-viewport-content {
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  padding: 24px; max-width: 340px;
+}
+
+.rp-item-icon-circle {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: #1a1a1a; border: 1px solid #333;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+
+.rp-viewport-title {
+  font-size: 16px; font-weight: 700;
+  color: #fff; letter-spacing: 0.01em;
+}
+
+.rp-viewport-desc {
+  font-size: 12px; color: #888;
+  margin-top: 4px; line-height: 1.4;
+}
+
+.rp-frame-ready {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px; padding: 5px 14px;
+  border-radius: 99px;
+  background: rgba(16,185,129,0.15);
+  border: 1px solid rgba(16,185,129,0.3);
+  font-size: 11px; font-family: monospace;
+  color: #34d399;
+}
+
+.rp-frame-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #10b981;
+}
+
+.rp-viewport-footer {
+  position: absolute; bottom: 12px; left: 16px; right: 16px;
+  z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(20,20,20,0.88);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px; border-radius: 8px;
+  border: 1px solid #2a2a2a;
+  font-size: 11px; color: #bbb;
+}
+
+.rp-primary-angle {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: #c59b4b;
+}
+
+/* Camera controls */
+.rp-camera-controls {
+  background: #1a1a1a;
+  border-top: 1px solid #2a2a2a;
+  padding: 14px 20px;
+  display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: 10px;
+}
+
+.rp-upload-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 8px;
+  background: #2a2a2a; border: 1px solid #3a3a3a;
+  color: #ccc; font-size: 12px; font-weight: 500;
+  font-family: 'General Sans', sans-serif;
+  cursor: pointer; transition: background 0.15s;
+}
+.rp-upload-btn:hover { background: #333; }
+
+.rp-take-photo-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 10px;
+  background: #c59b4b; border: none;
+  color: #111; font-size: 13px; font-weight: 700;
+  font-family: 'Clash Display', sans-serif;
+  cursor: pointer; letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(197,155,75,0.3);
+  transition: background 0.15s, transform 0.1s;
+}
+.rp-take-photo-btn:hover { background: #d4aa5a; }
+.rp-take-photo-btn:active { transform: scale(0.97); }
+
+.rp-retake-btn {
+  display: flex; align-items: center; gap: 4px;
+  padding: 8px 12px; border-radius: 4px;
+  background: transparent; border: none;
+  color: #888; font-size: 11px;
+  font-family: 'General Sans', sans-serif;
+  cursor: pointer; transition: color 0.15s, background 0.15s;
+}
+.rp-retake-btn:hover { color: #fff; background: #2a2a2a; }
+
+/* Gallery */
+.rp-gallery-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.rp-gallery-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.rp-gallery-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 700; color: #111;
+}
+
+.rp-gallery-count { font-size: 12px; color: #888; }
+
+.rp-gallery-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+
+.rp-photo {
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+
+.rp-photo--active { border: 2px solid #c59b4b; }
+
+.rp-photo-bg {
+  position: absolute; inset: 0;
+  background: #2a2a2a;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.rp-photo-label {
+  position: relative; z-index: 10;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(4px);
+  padding: 5px 8px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 9px;
+}
+
+.rp-photo-angle {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 700; color: #c59b4b;
+}
+
+.rp-photo-primary { font-family: monospace; color: #10b981; font-size: 9px; }
+.rp-photo-attached { font-family: monospace; color: #ccc; font-size: 9px; }
+
+.rp-photo-add {
+  border-radius: 8px;
+  border: 2px dashed #d0d0d0;
+  aspect-ratio: 16/9;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px; cursor: pointer; background: #fafafa;
+  transition: border-color 0.15s;
+}
+.rp-photo-add:hover { border-color: #c59b4b; }
+.rp-photo-add:hover .rp-photo-add-label { color: #111; }
+
+.rp-photo-add-label {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 10px; font-weight: 700;
+  color: #888; text-align: center;
+  transition: color 0.15s;
+}
+
+/* ══════════════════════
+   RIGHT: FORM
+══════════════════════ */
+.rp-form {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+.rp-form-header {
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 16px;
+}
+
+.rp-form-header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.rp-form-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 18px; font-weight: 700; color: #111;
+}
+
+.rp-reg-badge {
+  font-family: monospace;
+  font-size: 11px; font-weight: 700;
+  background: #f4f4f4; border: 1px solid #d0d0d0;
+  color: #555; padding: 4px 8px; border-radius: 4px;
+}
+
+.rp-form-desc { font-size: 12px; color: #888; line-height: 1.4; }
+
+/* Fields */
+.rp-field { display: flex; flex-direction: column; gap: 6px; }
+
+.rp-field-label-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.rp-label {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: #222;
+}
+
+.rp-required { color: #ef4444; }
+
+.rp-ai-detected {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 11px; color: #c59b4b; font-family: 'General Sans', sans-serif;
+}
+
+.rp-input-wrap {
+  position: relative;
+}
+
+.rp-input-wrap--half { max-width: 50%; }
+
+.rp-input-icon {
+  position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%);
+  color: #aaa; pointer-events: none;
+}
+
+.rp-input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  font-family: 'General Sans', sans-serif;
+  color: #111; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.rp-input:focus { border-color: #c59b4b; box-shadow: 0 0 0 2px rgba(197,155,75,0.15); }
+
+.rp-input--date { padding: 8px 12px 8px 36px; font-size: 12px; }
+
+.rp-select-wrap { position: relative; }
+
+.rp-select {
+  width: 100%;
+  padding: 10px 36px 10px 36px;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'General Sans', sans-serif;
+  color: #111; outline: none; appearance: none; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.rp-select:focus { border-color: #c59b4b; }
+
+.rp-select-arrow {
+  position: absolute; right: 10px; top: 50%;
+  transform: translateY(-50%);
+  color: #888; pointer-events: none;
+}
+
+.rp-field-hint {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; color: #888; line-height: 1.4;
+}
+
+/* Color swatches */
+.rp-color-swatches {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+
+.rp-swatch {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1px solid; display: inline-block;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.rp-swatch:hover { transform: scale(1.15); }
+
+.rp-swatch--active {
+  box-shadow: 0 0 0 2px #c59b4b, 0 0 0 4px rgba(197,155,75,0.2);
+}
+
+.rp-swatch-label { font-size: 11px; color: #888; margin-left: 4px; }
+
+/* Custody box */
+.rp-custody-box {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.rp-custody-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.rp-custody-title {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; color: #111;
+}
+
+.rp-in-storage {
+  font-family: monospace;
+  font-size: 10px; font-weight: 700;
+  background: #dcfce7; color: #166534;
+  padding: 2px 8px; border-radius: 3px;
+}
+
+.rp-custody-desc { font-size: 11px; color: #666; line-height: 1.5; }
+
+/* Submit */
+.rp-submit-area { display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
+
+.rp-submit-btn {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 24px; border-radius: 10px;
+  background: #111315; border: 1px solid #2a2a2a;
+  color: #fff;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.rp-submit-btn:hover { background: #222; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+
+.rp-submit-note {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  font-size: 11px; color: #888; text-align: center;
+}
+
+/* ══════════════════════
+   FOOTER
+══════════════════════ */
+.rp-footer {
+  background: #111315;
+  border-top: 1px solid rgba(197,155,75,0.3);
+  margin-top: 64px; color: #888;
+}
+
+.rp-footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 28px 1.5rem;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+
+.rp-footer-left {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+
+.rp-footer-name {
+  font-size: 13px; font-weight: 700;
+  color: #fff; letter-spacing: 0.01em;
+}
+
+.rp-footer-sep { color: #444; }
+
+.rp-footer-copy { font-size: 12px; color: #555; }
+
+.rp-footer-links {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+
+.rp-footer-links a {
+  font-size: 12px; color: #888;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.rp-footer-links a:hover { color: #c59b4b; }
+
+/* ══════════════════════
+   RESPONSIVE
+══════════════════════ */
+@media (max-width: 1024px) {
+  .rp-grid { grid-template-columns: 1fr; }
+  .rp-page-heading { flex-direction: column; }
+}
+
+@media (max-width: 640px) {
+  .rp-header-inner { padding: 0 1rem; height: 64px; }
+  .rp-main { padding: 1.5rem 1rem; }
+  .rp-page-heading h1 { font-size: 26px; }
+  .rp-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .rp-footer-inner { flex-direction: column; align-items: flex-start; padding: 20px 1rem; }
+  .rp-input-wrap--half { max-width: 100%; }
+}
