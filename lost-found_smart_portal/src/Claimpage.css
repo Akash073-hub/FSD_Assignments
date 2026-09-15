@@ -609,8 +609,10 @@
 /* ============================================================
    RIGHT COLUMN — FORM CARD
    ============================================================ */
-.cp-right {}
 .cp-form-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background: var(--cp-surface-white);
   border: 1px solid rgba(210,197,179,.55);
   border-radius: var(--cp-radius-lg);
