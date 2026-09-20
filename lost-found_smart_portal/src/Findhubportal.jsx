@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Findhubportal.css";
 import {
   Search,
@@ -13,15 +13,23 @@ import {
 
 export default function FindHubPortal() {
   const navigate = useNavigate();
+  const routeLocation = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("All Categories (6)");
   const [location, setLocation] = useState("Everywhere (All Hubs)");
   const [dateWindow, setDateWindow] = useState("Past 7 Days");
 
-  const goToSearch = (query) => {
+  const goToSearch = (query, nextFilters = {}) => {
     const queryText = typeof query === "string" ? query : searchQuery;
     const trimmedQuery = queryText.trim();
-    navigate("/search", trimmedQuery ? { state: { query: trimmedQuery } } : undefined);
+    navigate("/search", {
+      state: {
+        query: trimmedQuery,
+        category: nextFilters.category ?? category,
+        location: nextFilters.location ?? location,
+        dateWindow: nextFilters.dateWindow ?? dateWindow,
+      },
+    });
   };
 
   return (
@@ -41,20 +49,24 @@ export default function FindHubPortal() {
           </div>
         </div>
 
-        <div className="nav-center">
-          <a href="/home">
-            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>home</span>
-            Home
-          </a>
-          <div className="nav-underline" />
+        <div className="nav-center app-nav-links" aria-label="Primary navigation">
+          <button type="button" className={`app-nav-link${routeLocation.pathname === "/home" ? " app-nav-link--active" : ""}`} onClick={() => navigate("/home")}>
+            <span className="material-symbols-outlined">home</span> Home
+          </button>
+          <button type="button" className={`app-nav-link${routeLocation.pathname === "/report-item" ? " app-nav-link--active" : ""}`} onClick={() => navigate("/report-item")}>
+            <span className="material-symbols-outlined">edit_document</span> Report
+          </button>
+          <button type="button" className={`app-nav-link${routeLocation.pathname === "/search" ? " app-nav-link--active" : ""}`} onClick={() => navigate("/search")}>
+            <span className="material-symbols-outlined">search</span> Matches
+          </button>
         </div>
 
         <div className="nav-right">
           <button className="nav-icon-btn" title="Notifications" onClick={() => navigate("/notifications")}>
-            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>notifications</span>
+            <span className="material-symbols-outlined">notifications</span>
             <span className="nav-notif-dot" />
           </button>
-          <button className="nav-icon-btn" title="Help">
+          <button className="nav-icon-btn" title="Rules and safety" onClick={() => navigate("/rules")}>
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>help</span>
           </button>
           <div className="nav-avatar">JS</div>
@@ -169,9 +181,9 @@ export default function FindHubPortal() {
                 </p>
               </div>
               {/* Search icon button → goes to search page */}
-              <div className="panel-icon-btn" onClick={goToSearch} style={{ cursor: "pointer" }} title="Go to search">
+              <button className="panel-icon-btn" onClick={() => goToSearch()} title="Go to search" type="button">
                 <Search size={15} color="#999" />
-              </div>
+              </button>
             </div>
 
             {/* Clicking the search input also navigates */}
@@ -200,8 +212,9 @@ export default function FindHubPortal() {
                 <select
                   value={category}
                   onChange={(e) => {
-                    setCategory(e.target.value);
-                    goToSearch();
+                    const nextCategory = e.target.value;
+                    setCategory(nextCategory);
+                    goToSearch(searchQuery, { category: nextCategory });
                   }}
                 >
                   <option>All Categories (6)</option>
@@ -217,8 +230,9 @@ export default function FindHubPortal() {
                 <select
                   value={location}
                   onChange={(e) => {
-                    setLocation(e.target.value);
-                    goToSearch();
+                    const nextLocation = e.target.value;
+                    setLocation(nextLocation);
+                    goToSearch(searchQuery, { location: nextLocation });
                   }}
                 >
                   <option>Everywhere (All Hubs)</option>
@@ -233,8 +247,9 @@ export default function FindHubPortal() {
                 <select
                   value={dateWindow}
                   onChange={(e) => {
-                    setDateWindow(e.target.value);
-                    goToSearch();
+                    const nextDateWindow = e.target.value;
+                    setDateWindow(nextDateWindow);
+                    goToSearch(searchQuery, { dateWindow: nextDateWindow });
                   }}
                 >
                   <option>Past 7 Days</option>
@@ -306,11 +321,11 @@ export default function FindHubPortal() {
           </span>
         </div>
         <div className="footer-links">
-          <a href="/">Privacy Policy</a>
-          <a href="/">Terms of Service</a>
-          <a href="/">Campus Safety</a>
-          <a href="/">Support Center</a>
-          <a href="/">Contact Hub Admin</a>
+          <a href="/home">Privacy Policy</a>
+          <a href="/home">Terms of Service</a>
+          <a href="/home">Campus Safety</a>
+          <a href="/home">Support Center</a>
+          <a href="/home">Contact Hub Admin</a>
         </div>
       </footer>
     </>

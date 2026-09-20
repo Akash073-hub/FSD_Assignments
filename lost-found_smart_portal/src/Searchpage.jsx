@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Searchpage.css";
 
 const ITEMS = [
@@ -71,10 +71,12 @@ const ITEMS = [
 
 export default function SearchPage() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All Categories");
-  const [location, setLocation] = useState("Everywhere");
-  const [dateWindow, setDateWindow] = useState("All Time");
+  const routeLocation = useLocation();
+  const searchState = routeLocation.state || {};
+  const [search, setSearch] = useState(searchState.query || "");
+  const [category, setCategory] = useState(searchState.category || "All Categories");
+  const [location, setLocation] = useState(searchState.location || "Everywhere");
+  const [dateWindow, setDateWindow] = useState(searchState.dateWindow || "All Time");
 
   return (
     <>
@@ -96,11 +98,10 @@ export default function SearchPage() {
           </div>
 
           {/* Nav */}
-          <nav className="sp-nav">
-            <a href="/home" className="sp-nav-link">
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>home</span>
-              Home
-            </a>
+          <nav className="sp-nav app-nav-links" aria-label="Primary navigation">
+            <button type="button" className="app-nav-link" onClick={() => navigate("/home")}><span className="material-symbols-outlined">home</span> Home</button>
+            <button type="button" className="app-nav-link" onClick={() => navigate("/report-item")}><span className="material-symbols-outlined">edit_document</span> Report</button>
+            <button type="button" className="app-nav-link app-nav-link--active" onClick={() => navigate("/search")}><span className="material-symbols-outlined">search</span> Matches</button>
           </nav>
 
           {/* Right icons */}
@@ -109,7 +110,7 @@ export default function SearchPage() {
               <span className="material-symbols-outlined">notifications</span>
               <span className="sp-notif-dot" />
             </button>
-            <button className="sp-icon-btn" title="Help">
+            <button className="sp-icon-btn" title="Rules and safety" onClick={() => navigate("/rules")}>
               <span className="material-symbols-outlined">help</span>
             </button>
             <div className="sp-avatar">JS</div>

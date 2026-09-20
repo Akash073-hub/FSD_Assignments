@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Reportitem.css";
 
 export default function ReportPage() {
   const navigate = useNavigate();
+  const routeLocation = useLocation();
   const [itemTitle, setItemTitle] = useState("Apple AirPods Pro (2nd Gen) with MagSafe Case");
   const [category, setCategory] = useState("Electronics & Audio Equipment");
   const [location, setLocation] = useState("Main Library Wing (Floor 3 - Study Pod 12)");
@@ -30,21 +31,19 @@ export default function ReportPage() {
           </div>
 
           {/* Nav */}
-          <nav className="rp-nav">
-            <a href="/home" className="rp-nav-link" onClick={e => { e.preventDefault(); navigate("/home"); }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 18 }}>home</span>
-              Home
-              <span className="rp-nav-underline" />
-            </a>
+          <nav className="rp-nav app-nav-links" aria-label="Primary navigation">
+            <button type="button" className={`app-nav-link${routeLocation.pathname === "/home" ? " app-nav-link--active" : ""}`} onClick={() => navigate("/home")}><span className="material-symbols-outlined">home</span> Home</button>
+            <button type="button" className="app-nav-link app-nav-link--active" onClick={() => navigate("/report-item")}><span className="material-symbols-outlined">edit_document</span> Report</button>
+            <button type="button" className={`app-nav-link${routeLocation.pathname === "/search" ? " app-nav-link--active" : ""}`} onClick={() => navigate("/search")}><span className="material-symbols-outlined">search</span> Matches</button>
           </nav>
 
           {/* Right */}
           <div className="rp-header-right">
-              <button className="rp-icon-btn" title="Notifications" onClick={() => navigate("/notifications")}>
-              <span className="material-symbols-outlined" style={{ fontSize: 20 }}>notifications</span>
+            <button className="rp-icon-btn" title="Notifications" onClick={() => navigate("/notifications")}>
+              <span className="material-symbols-outlined">notifications</span>
               <span className="rp-notif-dot" />
             </button>
-            <button className="rp-icon-btn" title="Help">
+            <button className="rp-icon-btn" title="Rules and safety" onClick={() => navigate("/rules")}>
               <span className="material-symbols-outlined" style={{ fontSize: 20 }}>help</span>
             </button>
             <div className="rp-avatar">JS</div>
