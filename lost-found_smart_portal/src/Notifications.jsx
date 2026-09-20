@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Notifications.css";
 
 const Icon = ({ name, filled = false, style = {} }) => (
@@ -19,6 +20,7 @@ const TABS = [
 ];
 
 export default function Notifications() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
 
   return (
@@ -41,16 +43,17 @@ export default function Notifications() {
           </a>
 
           <div className="nf-nav-right">
-            <a href="/home" className="nf-nav-link">
-              <Icon name="home" />
-              Home
-            </a>
+            <nav className="app-nav-links" aria-label="Primary navigation">
+              <button type="button" className="app-nav-link" onClick={() => navigate("/home")}><Icon name="home" /> Home</button>
+              <button type="button" className="app-nav-link" onClick={() => navigate("/report-item")}><Icon name="edit_document" /> Report</button>
+              <button type="button" className="app-nav-link" onClick={() => navigate("/search")}><Icon name="search" /> Matches</button>
+            </nav>
             <div className="nf-nav-actions">
               <button className="nf-icon-btn" title="Notifications">
                 <Icon name="notifications" filled />
                 <span className="nf-notif-badge">4</span>
               </button>
-              <button className="nf-help-btn" title="Help">
+              <button className="nf-help-btn" title="Rules and safety" onClick={() => navigate("/rules")}>
                 <Icon name="help" />
               </button>
               <div className="nf-sep" />

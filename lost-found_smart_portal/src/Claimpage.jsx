@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Claimpage.css";
 
 // Shared Material Symbols keep icon weight and geometry consistent across pages.
@@ -24,12 +24,14 @@ const WALLET_IMG =
 
 export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = currentUser || { name: "J. Sharma", initials: "JS", email: "j.sharma22@rvu.edu.in" };
 
   const [claimRole, setClaimRole] = useState("owner");
+  const [email, setEmail] = useState("");
   const [narrative, setNarrative] = useState("");
   const [usn, setUsn] = useState("");
-  const [phone, setPhone] = useState("98765 43210");
+  const [phone, setPhone] = useState("");
   const [altContact, setAltContact] = useState("");
   const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState({});
@@ -39,7 +41,7 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
     const e = {};
     if (!narrative.trim() || narrative.trim().length < 20)
       e.narrative = "Please describe the circumstances in at least 20 characters.";
-    if (!user.email.endsWith("@rvu.edu.in"))
+    if (!email.endsWith("@rvu.edu.in"))
       e.email = "Must be a valid @rvu.edu.in email.";
     if (!/^\d{10}$/.test(phone.replace(/\s/g, "")))
       e.phone = "Enter a valid 10-digit mobile number.";
@@ -54,7 +56,7 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
-      if (onConfirm) onConfirm({ claimRole, narrative, usn, phone, altContact });
+      if (onConfirm) onConfirm({ claimRole, email, narrative, usn, phone, altContact });
     }, 1600);
   };
 
@@ -75,8 +77,10 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
           </div>
 
           <div className="cp-header-right">
-            <nav className="cp-nav" aria-label="Primary navigation">
-              <a href="/home" className="cp-nav-link cp-nav-link--active">Home</a>
+            <nav className="cp-nav app-nav-links" aria-label="Primary navigation">
+              <button type="button" className={`app-nav-link${location.pathname === "/home" ? " app-nav-link--active" : ""}`} onClick={() => navigate("/home")}><Icon.Home /> Home</button>
+              <button type="button" className={`app-nav-link${location.pathname === "/report-item" ? " app-nav-link--active" : ""}`} onClick={() => navigate("/report-item")}><span className="material-symbols-outlined">edit_document</span> Report</button>
+              <button type="button" className={`app-nav-link${location.pathname === "/search" ? " app-nav-link--active" : ""}`} onClick={() => navigate("/search")}><span className="material-symbols-outlined">search</span> Matches</button>
             </nav>
             <div className="cp-divider" aria-hidden="true" />
             <div className="cp-util-cluster">
@@ -84,13 +88,12 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                 <Icon.Notification />
                 <span className="cp-notif-badge" aria-hidden="true">4</span>
               </button>
-              <button type="button" className="cp-icon-btn" aria-label="Help">
+              <button type="button" className="cp-icon-btn" aria-label="Rules and safety" onClick={() => navigate("/rules")}>
                 <Icon.Help />
               </button>
               <div className="cp-divider" aria-hidden="true" />
               <div className="cp-user" aria-label={`Signed in as ${user.name}`}>
                 <div className="cp-avatar">{user.initials}</div>
-                <span className="cp-user-name">{user.name}</span>
               </div>
             </div>
           </div>
@@ -142,10 +145,6 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
           <div className="cp-heading-chips">
             <span className="cp-chip cp-chip--secondary">
               <Icon.Gavel /> RVU Code §4.18
-            </span>
-            <span className="cp-chip cp-chip--active">
-              <span className="cp-pulse" aria-hidden="true" />
-              Active Session
             </span>
           </div>
         </div>
@@ -363,8 +362,13 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                         id="inst_email"
                         type="email"
                         className={`cp-input cp-input--email${errors.email ? " cp-input--error" : ""}`}
-                        value={user.email}
-                        readOnly
+                        placeholder="your.name@rvu.edu.in"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (errors.email) setErrors((p) => ({ ...p, email: undefined }));
+                        }}
+                        required
                         aria-describedby="email-hint"
                       />
                       <span className="cp-email-suffix" aria-hidden="true">
@@ -388,6 +392,7 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                           id="contact_phone"
                           type="tel"
                           className={`cp-input cp-input--phone${errors.phone ? " cp-input--error" : ""}`}
+                          placeholder="Enter 10-digit mobile number"
                           value={phone}
                           onChange={(e) => {
                             setPhone(e.target.value);

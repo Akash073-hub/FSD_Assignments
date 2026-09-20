@@ -1,0 +1,232 @@
+.rules-root {
+  min-height: 100vh;
+  background: var(--theme-surface);
+  color: var(--theme-text);
+  font-family: 'General Sans', sans-serif;
+}
+
+.rules-header {
+  background: var(--theme-ink);
+  border-bottom: 4px solid var(--theme-gold);
+}
+
+.rules-header-inner {
+  max-width: 1280px;
+  min-height: 64px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rules-brand,
+.rules-close,
+.rules-breadcrumb button {
+  border: 0;
+  cursor: pointer;
+}
+
+.rules-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+}
+
+.rules-brand-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(197,155,75,.45);
+  border-radius: 6px;
+  color: var(--theme-gold);
+}
+
+.rules-brand strong,
+.rules-brand small {
+  display: block;
+}
+
+.rules-brand strong {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 17px;
+}
+
+.rules-brand small {
+  margin-top: 3px;
+  color: #888;
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.rules-close {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  background: rgba(197,155,75,.14);
+  color: var(--theme-gold);
+}
+
+.rules-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 56px;
+}
+
+.rules-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 24px;
+  color: var(--theme-faint);
+  font-size: 12px;
+}
+
+.rules-breadcrumb button {
+  padding: 0;
+  background: transparent;
+  color: var(--theme-muted);
+}
+
+.rules-breadcrumb button:hover {
+  color: var(--theme-gold-deep);
+}
+
+.rules-heading {
+  max-width: 650px;
+  margin-bottom: 28px;
+}
+
+.rules-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--theme-gold-deep);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.rules-eyebrow .material-symbols-outlined {
+  font-size: 17px;
+}
+
+.rules-heading h1 {
+  margin: 9px 0 7px;
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(30px, 5vw, 46px);
+  line-height: 1.05;
+}
+
+.rules-heading p {
+  margin: 0;
+  color: var(--theme-muted);
+  line-height: 1.6;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.rules-card {
+  position: relative;
+  min-height: 210px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid var(--theme-border);
+  border-top: 3px solid var(--theme-gold);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.rules-card:hover {
+  border-color: rgba(197,155,75,.75);
+  box-shadow: 0 0 0 1px rgba(197,155,75,.32), 0 0 18px rgba(197,155,75,.22);
+  transform: translateY(-2px);
+}
+
+.rules-card-number {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  color: #cfcfcf;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.rules-card-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+  border-radius: 6px;
+  background: #f8f1df;
+  color: var(--theme-gold-deep);
+}
+
+.rules-card-icon .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.rules-card h2 {
+  max-width: 85%;
+  margin: 0 0 8px;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.rules-card p {
+  margin: 0;
+  color: var(--theme-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.rules-notice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--theme-gold);
+  background: #fff;
+  color: var(--theme-muted);
+  font-size: 12px;
+}
+
+.rules-notice .material-symbols-outlined {
+  color: var(--theme-gold-deep);
+}
+
+.rules-notice p {
+  margin: 0;
+}
+
+@media (max-width: 650px) {
+  .rules-main {
+    padding: 24px 16px 40px;
+  }
+
+  .rules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rules-card {
+    min-height: auto;
+  }
+}

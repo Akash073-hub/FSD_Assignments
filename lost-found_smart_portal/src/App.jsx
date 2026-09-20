@@ -5,6 +5,8 @@ import Searchpage from "./Searchpage";
 import ClaimPage from "./Claimpage";
 import ReportItem from "./Reportitem";
 import Notifications from "./Notifications";
+import RulesPage from "./Rulespage";
+import "./Theme.css";
 
 function LoginRoute() {
     const navigate = useNavigate();
@@ -22,6 +24,7 @@ export default function App() {
                 <Route path="/claim" element={<ClaimPage />} />
                 <Route path="/report-item" element={<ReportItem />} />
                 <Route path="/notifications" element={<Notifications />} />
+                <Route path="/rules" element={<RulesPage />} />
             </Routes>
         </BrowserRouter>
     );
