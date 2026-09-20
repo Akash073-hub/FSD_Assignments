@@ -2,15 +2,13 @@
 
 A collection of Full Stack Development assignments and practice projects built with React, Node.js, Express, EJS, and browser APIs.
 
-## Projects
+## Concepts by Project
 
 ### 1. FindHub Smart Lost & Found Portal
 
 **Folder:** [`lost-found_smart_portal`](lost-found_smart_portal)
 
-A React campus lost-and-found portal for reporting found items, searching the item registry, verifying ownership, submitting claims, and viewing custody notifications.
-
-**Topics demonstrated:**
+**Concepts learned:**
 
 - React component-based UI design
 - React Router navigation and route-based page rendering
@@ -21,6 +19,14 @@ A React campus lost-and-found portal for reporting found items, searching the it
 - Material Symbols and Lucide icons
 - Ownership verification and custody workflow UI
 - Accessibility labels and semantic form structure
+
+**Next concepts to learn:**
+
+- API integration with a real backend
+- Database persistence for users, items, claims, and notifications
+- Authentication and protected routes
+- Automated component and end-to-end testing
+- File upload storage and image validation
 
 **Routes:**
 
@@ -56,9 +62,7 @@ npm run build
 
 **Folder:** [`my-app4`](my-app4)
 
-A server-rendered game-library application built with Express and EJS. It includes a discover page, game search, profile page, item reporting flow, claim requests, and a custom not-found page.
-
-**Topics demonstrated:**
+**Concepts learned:**
 
 - Node.js application setup
 - Express server configuration
@@ -70,6 +74,14 @@ A server-rendered game-library application built with Express and EJS. It includ
 - Server-side rendering and view data binding
 - Route-level 404 handling
 - Reusable header and footer templates
+
+**Next concepts to learn:**
+
+- REST API design and JSON responses
+- Middleware for authentication and validation
+- Persistent storage with MongoDB or PostgreSQL
+- Sessions, cookies, and CSRF protection
+- Deployment and environment configuration
 
 **Run it:**
 
@@ -93,9 +105,7 @@ npm run dev
 
 **Folder:** [`my-app`](my-app)
 
-A React portfolio application presenting developer information, skills, projects, coursework, social links, a terminal-style interactive section, and a contact form.
-
-**Topics demonstrated:**
+**Concepts learned:**
 
 - React functional components
 - `useState` for tabs, copy-to-clipboard feedback, and form status
@@ -106,6 +116,14 @@ A React portfolio application presenting developer information, skills, projects
 - Clipboard API usage
 - Project, skills, coursework, and social-link data modeling
 - CSS-based visual layout and animation
+
+**Next concepts to learn:**
+
+- Component extraction and reusable design systems
+- Form submission to a backend service
+- Accessibility testing and keyboard navigation
+- Performance optimization and lazy loading
+- Deployment with environment variables
 
 **Run it:**
 
@@ -121,9 +139,7 @@ npm start
 
 **Folder:** [`my-app2`](my-app2)
 
-A React form assignment for collecting student registration information and demonstrating client-side validation, reset behavior, and toast feedback.
-
-**Topics demonstrated:**
+**Concepts learned:**
 
 - Controlled React inputs
 - Text, email, telephone, select, radio, and checkbox controls
@@ -132,6 +148,14 @@ A React form assignment for collecting student registration information and demo
 - Resetting form state
 - Toast-style success feedback
 - Basic event handling and state management
+
+**Next concepts to learn:**
+
+- Schema-based form validation
+- Reusable form field components
+- Server-side validation
+- Persisting submitted records in a database
+- Error handling for asynchronous requests
 
 **Run it:**
 
@@ -147,9 +171,7 @@ npm start
 
 **Folder:** [`myapp3`](myapp3)
 
-A React shopping application with Home, Shop Items, and Cart routes. Products can be added, removed, and updated through a shared cart context.
-
-**Topics demonstrated:**
+**Concepts learned:**
 
 - React Router routes and links
 - React Context API
@@ -159,6 +181,14 @@ A React shopping application with Home, Shop Items, and Cart routes. Products ca
 - Quantity updates and cart totals
 - Derived state such as cart item counts
 - Component composition and reusable product views
+
+**Next concepts to learn:**
+
+- Reducer-based state management with `useReducer`
+- Persistent cart state with local storage
+- Product data from an API
+- Authentication and user-specific carts
+- Checkout and payment workflow concepts
 
 **Routes:**
 
@@ -182,9 +212,7 @@ npm start
 
 **File:** [`node1.js`](node1.js)
 
-A small Node.js console exercise demonstrating a last-in, first-out stack using a JavaScript array.
-
-**Topics demonstrated:**
+**Concepts learned:**
 
 - JavaScript arrays
 - Stack data structure
@@ -192,6 +220,14 @@ A small Node.js console exercise demonstrating a last-in, first-out stack using 
 - `pop()` removal
 - LIFO behavior
 - Node.js console execution
+
+**Next concepts to learn:**
+
+- Queue and deque data structures
+- Stack implementation using a class
+- Time and space complexity analysis
+- Common stack algorithms such as balanced parentheses
+- Choosing data structures for real application problems
 
 **Run it:**
 
