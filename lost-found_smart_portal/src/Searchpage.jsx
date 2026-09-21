@@ -73,6 +73,9 @@ export default function SearchPage() {
   const navigate = useNavigate();
   const routeLocation = useLocation();
   const searchState = routeLocation.state || {};
+  const searchableItems = ITEMS.filter(
+    (item) => item.status !== "Verification Pending" && item.status !== "Claim In Progress"
+  );
   const [search, setSearch] = useState(searchState.query || "");
   const [category, setCategory] = useState(searchState.category || "All Categories");
   const [location, setLocation] = useState(searchState.location || "Everywhere");
@@ -219,7 +222,7 @@ export default function SearchPage() {
 
           {/* Sort bar */}
           <div className="sp-sort-bar">
-            <span className="sp-item-count">603 Items Found</span>
+            <span className="sp-item-count">{searchableItems.length} Items Found</span>
             <div className="sp-sort-actions">
               <button className="sp-reset-btn">
                 <span className="material-symbols-outlined" style={{ fontSize: 16 }}>refresh</span>
@@ -236,7 +239,7 @@ export default function SearchPage() {
 
         {/* Items grid */}
         <div className="sp-items-grid">
-          {ITEMS.map((item) => (
+          {searchableItems.map((item) => (
             <div className="sp-item-card" key={item.id}>
               <div className="sp-item-top">
                 {/* Category + ID */}
@@ -271,7 +274,8 @@ export default function SearchPage() {
                   className={`sp-action-btn ${item.btnClass}`}
                   onClick={() => navigate("/claim")}
                 >
-                  {item.btnLabel}
+                  <span className="sp-action-default">{item.btnLabel}</span>
+                  <span className="sp-action-hover">Verify Ownership</span>
                 </button>
               </div>
             </div>
@@ -281,7 +285,7 @@ export default function SearchPage() {
         {/* Pagination */}
         <div className="sp-pagination">
           <span className="sp-page-info">
-            Showing <strong>1 - 8</strong> of <strong>603</strong> entries (Page 1 of 76)
+            Showing <strong>1 - {searchableItems.length}</strong> of <strong>{searchableItems.length}</strong> entries (Page 1 of 1)
           </span>
           <div className="sp-page-btns">
             <button className="sp-page-btn sp-page-prev" disabled>Previous</button>

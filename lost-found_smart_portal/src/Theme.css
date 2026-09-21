@@ -15,6 +15,12 @@
   --theme-soft: #f4f4f4;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body,
 #root {
@@ -204,7 +210,8 @@ button:not(:disabled):hover {
 .sp-main,
 .cp-main,
 .nf-page,
-.rp-main {
+.rp-main,
+.rules-main {
   padding: 32px 24px 48px !important;
 }
 
@@ -387,7 +394,8 @@ button:not(:disabled):hover {
 .cp-main,
 .lp-main,
 .nf-page,
-.rp-main {
+.rp-main,
+.rules-main {
   background: var(--theme-surface);
 }
 
