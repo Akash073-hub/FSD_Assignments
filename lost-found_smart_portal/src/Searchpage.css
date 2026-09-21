@@ -616,6 +616,14 @@ h1, h2, .sp-brand-name, .sp-footer-name {
   letter-spacing: 0.02em;
 }
 
+.sp-action-hover { display: none; }
+
+.sp-action-btn:hover .sp-action-default,
+.sp-action-btn:focus-visible .sp-action-default { display: none; }
+
+.sp-action-btn:hover .sp-action-hover,
+.sp-action-btn:focus-visible .sp-action-hover { display: inline; }
+
 .btn-dark {
   background: #18181B;
   color: #ffffff;
@@ -630,6 +638,12 @@ h1, h2, .sp-brand-name, .sp-footer-name {
 }
 
 .btn-gold:hover { background: #B8860B; }
+
+.sp-action-btn:hover,
+.sp-action-btn:focus-visible {
+  background-color: #C59B4B !important;
+  color: #18181B !important;
+}
 
 /* ══════════════════════════════
    PAGINATION
