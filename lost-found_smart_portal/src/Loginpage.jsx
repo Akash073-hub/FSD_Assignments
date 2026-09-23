@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Loginpage.css";
 
-export default function LoginPage({ onLoginSuccess }) {
+export default function LoginPage({ onLoginSuccess, onForgotPassword }) {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
     otp: "",
-    captcha: "",
     agreed: false,
   });
   const [otpSent, setOtpSent] = useState(false);
@@ -38,8 +37,6 @@ export default function LoginPage({ onLoginSuccess }) {
       newErrors.phone = "Enter a valid 10-digit phone number.";
     if (!formData.otp || formData.otp.length !== 6)
       newErrors.otp = "Enter the 6-digit OTP sent to your email.";
-    if (!formData.captcha.trim())
-      newErrors.captcha = "Please complete the security verification.";
     if (!formData.agreed)
       newErrors.agreed = "You must agree to the campus policies to continue.";
     return newErrors;
@@ -332,38 +329,16 @@ export default function LoginPage({ onLoginSuccess }) {
                   )}
                 </div>
 
-                {/* CAPTCHA */}
-                <div className="lp-captcha-block">
-                  <div className="lp-captcha-header">
-                    <span className="lp-label">Security Verification</span>
-                    <button type="button" className="lp-captcha-reload">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <polyline points="23 4 23 10 17 10" />
-                        <polyline points="1 20 1 14 7 14" />
-                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-                      </svg>
-                      Reload Code
-                    </button>
-                  </div>
-                  <div className="lp-captcha-row">
-                    <div className="lp-captcha-display" aria-label="CAPTCHA: R 7 9 K Q 2" role="img">
-                      <span className="lp-captcha-text" aria-hidden="true">R 7 9 K Q 2</span>
-                    </div>
-                    <input
-                      name="captcha"
-                      type="text"
-                      className={`lp-input lp-captcha-input${errors.captcha ? " lp-input--error" : ""}`}
-                      placeholder="Enter characters"
-                      value={formData.captcha}
-                      onChange={handleChange}
-                      required
-                      aria-label="Enter CAPTCHA characters"
-                      autoComplete="off"
-                    />
-                  </div>
-                  {errors.captcha && (
-                    <p className="lp-error" role="alert">{errors.captcha}</p>
-                  )}
+                {/* Forgot password */}
+                <div className="lp-forgot-password-row">
+                  <button
+                    type="button"
+                    className="lp-forgot-password-btn"
+                    onClick={onForgotPassword}
+                    aria-label="Forgot Password?"
+                  >
+                    Forgot Password?
+                  </button>
                 </div>
 
                 {/* Consent */}
