@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import LoginPage from "./Loginpage";
+import ForgotPasswordPage from "./ForgotPasswordPage";
 import Findhubportal from "./Findhubportal";
 import Searchpage from "./Searchpage";
 import ClaimPage from "./Claimpage";
@@ -11,7 +12,12 @@ import "./Theme.css";
 function LoginRoute() {
     const navigate = useNavigate();
 
-    return <LoginPage onLoginSuccess={() => navigate("/home")} />;
+    return (
+        <LoginPage
+            onLoginSuccess={() => navigate("/home")}
+            onForgotPassword={() => navigate("/forgot-password")}
+        />
+    );
 }
 
 export default function App() {
@@ -19,6 +25,7 @@ export default function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<LoginRoute />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/home" element={<Findhubportal />} />
                 <Route path="/search" element={<Searchpage />} />
                 <Route path="/claim" element={<ClaimPage />} />

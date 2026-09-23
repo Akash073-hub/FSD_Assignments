@@ -540,6 +540,27 @@
   padding-left: 12px;
 }
 
+.lp-forgot-password-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -4px;
+}
+.lp-forgot-password-btn {
+  background: none;
+  border: none;
+  color: var(--lp-gold-deep);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--lp-transition);
+}
+.lp-forgot-password-btn:hover,
+.lp-forgot-password-btn:focus-visible {
+  color: var(--lp-gold);
+  outline: none;
+}
+
 /* Error message */
 .lp-error {
   font-size: 11px;
