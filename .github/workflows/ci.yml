@@ -1,0 +1,173 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, pocket]
+  pull_request:
+    branches: [main, master, pocket]
+
+jobs:
+  # ─── Lost & Found Smart Portal ───────────────────────────────────────────────
+  lost-found-portal:
+    name: Lost & Found Portal – Install / Test / Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: lost-found_smart_portal
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: lost-found_smart_portal/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --watchAll=false --passWithNoTests
+        env:
+          CI: true
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: false
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lost-found-portal-build
+          path: lost-found_smart_portal/build/
+          retention-days: 7
+
+  # ─── My App ──────────────────────────────────────────────────────────────────
+  my-app:
+    name: My App – Install / Test / Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: my-app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Run tests
+        run: npm test -- --watchAll=false --passWithNoTests
+        env:
+          CI: true
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: false
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-build
+          path: my-app/build/
+          retention-days: 7name: CI
+
+on:
+  push:
+    branches: [main, master, pocket]
+  pull_request:
+    branches: [main, master, pocket]
+
+jobs:
+  # ─── Lost & Found Smart Portal ───────────────────────────────────────────────
+  lost-found-portal:
+    name: Lost & Found Portal – Install / Test / Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: lost-found_smart_portal
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: lost-found_smart_portal/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --watchAll=false --passWithNoTests
+        env:
+          CI: true
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: false          # keeps non-fatal warnings from failing the build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lost-found-portal-build
+          path: lost-found_smart_portal/build/
+          retention-days: 7
+
+  # ─── My App ──────────────────────────────────────────────────────────────────
+  my-app:
+    name: My App – Install / Test / Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: my-app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: my-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --watchAll=false --passWithNoTests
+        env:
+          CI: true
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: false
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-build
+          path: my-app/build/
+          retention-days: 7
