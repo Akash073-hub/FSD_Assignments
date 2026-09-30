@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title><%= title %> | Family Management</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+<main class="shell narrow"><a class="back" href="/users/<%= child.parentId._id %>">&larr; Back to <%= child.parentId.firstName %>'s profile</a><section class="panel"><p class="eyebrow">Child details</p><h1><%= child.firstName %> <%= child.lastName %></h1><form id="child-form" class="form-grid"><label>First name<input name="firstName" value="<%= child.firstName %>" required></label><label>Last name<input name="lastName" value="<%= child.lastName %>" required></label><label>Age<input type="number" name="age" value="<%= child.age %>" min="0" max="150" required></label><label>Email<input type="email" name="email" value="<%= child.email %>" required></label><button class="button" type="submit">Update child</button></form><p id="message" class="notice" hidden></p></section></main>
+<script>
+document.getElementById("child-form").addEventListener("submit", async (event) => { event.preventDefault(); const data = Object.fromEntries(new FormData(event.target)); const response = await fetch("/children/<%= child._id %>", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); const result = await response.json(); const message = document.getElementById("message"); message.hidden = false; message.textContent = result.message; if (response.ok) setTimeout(() => window.location.reload(), 500); });
+</script>
+</body>
+</html>

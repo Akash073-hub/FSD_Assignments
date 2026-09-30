@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title><%= title %> | Family Management</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+<main class="shell">
+  <header class="topbar"><div><p class="eyebrow">Family Management</p><h1>Keep every household connected.</h1><p class="lead">Create parent profiles, add their children, and manage each family from one place.</p></div><a class="button" href="#create-user">+ Add parent</a></header>
+  <section class="how-it-works"><div><span class="step">01</span><strong>Create a parent</strong><small>Save contact details in MongoDB.</small></div><div><span class="step">02</span><strong>Open their household</strong><small>See only children linked to that user.</small></div><div><span class="step">03</span><strong>Manage children</strong><small>Add, update, or delete family members.</small></div></section>
+  <% if (typeof searchTerm !== "undefined" && searchTerm) { %><p class="notice">Showing users matching “<%= searchTerm %>”.</p><% } %>
+  <section class="toolbar"><div><p class="eyebrow">Directory</p><h2>Parent profiles</h2></div><form action="/users/search" onsubmit="this.action += '/' + encodeURIComponent(this.name.value.trim()); return this.name.value.trim() !== '';" class="search-form"><input name="name" placeholder="Search by first name"><button class="text-button" type="submit">Search</button></form></section>
+  <section class="user-grid">
+    <% if (!users.length) { %><p class="empty">No users found.</p><% } %>
+    <% users.forEach((user) => { %>
+      <a class="user-card" href="/users/<%= user._id %>"><span class="avatar"><%= user.firstName.charAt(0).toUpperCase() %></span><span><strong><%= user.firstName %> <%= user.lastName %></strong><small><%= user.email %></small><small><%= user.phone %></small><em>Open household &rarr;</em></span></a>
+    <% }) %>
+  </section>
+  <section id="create-user" class="panel create-panel"><div><p class="eyebrow">Start here</p><h2>Create a parent profile</h2><p class="muted">This parent becomes the owner of every child added from their household page.</p></div><form method="post" action="/users" class="form-grid"><label>First name<input name="firstName" placeholder="Danish" required></label><label>Last name<input name="lastName" placeholder="Sharma" required></label><label>Email<input type="email" name="email" placeholder="danish@example.com" required></label><label>Phone<input name="phone" placeholder="+91 98765 43210" required></label><button class="button" type="submit">Create profile</button></form></section>
+</main>
+</body>
+</html>

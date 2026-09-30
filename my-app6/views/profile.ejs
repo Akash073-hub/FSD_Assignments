@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title><%= title %> | Family Management</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+<main class="shell">
+  <a class="back" href="/users">&larr; All users</a>
+  <header class="profile-head"><div><p class="eyebrow">Household profile</p><h1><%= user.firstName %> <%= user.lastName %></h1><p class="muted"><%= user.email %> · <%= user.phone %></p></div><a class="button" href="#add-child">+ Add child</a></header>
+  <section class="panel"><div class="section-title"><div><p class="eyebrow">Household</p><h2>Children</h2></div><span class="count"><%= children.length %></span></div>
+    <% if (!children.length) { %><div class="empty"><strong>This household has no children yet.</strong><p>Add the first child below to begin building this family.</p><a class="text-button" href="#add-child">Add a child &rarr;</a></div><% } else { %><div class="child-list"><% children.forEach((child) => { %><article class="child-row"><div><a class="child-name" href="/users/<%= user._id %>/children/<%= child._id %>"><%= child.firstName %> <%= child.lastName %></a><p><%= child.age %> years old · <%= child.email %></p></div><div class="row-actions"><a class="text-button" href="/users/<%= user._id %>/children/<%= child._id %>">Edit</a><button class="danger text-button" data-delete="<%= child._id %>">Delete</button></div></article><% }) %></div><% } %>
+  </section>
+  <section id="add-child" class="panel"><h2>Add a child</h2><form method="post" action="/users/<%= user._id %>/children" class="form-grid"><label>First name<input name="firstName" required></label><label>Last name<input name="lastName" required></label><label>Age<input type="number" name="age" min="0" max="150" required></label><label>Email<input type="email" name="email" required></label><button class="button" type="submit">Save child</button></form></section>
+</main>
+<script>
+document.querySelectorAll("[data-delete]").forEach((button) => button.addEventListener("click", async () => {
+  if (!confirm("Delete this child?")) return;
+  const response = await fetch(`/children/${button.dataset.delete}`, { method: "DELETE" });
+  if (response.ok) window.location.reload(); else alert((await response.json()).message);
+}));
+</script>
+</body>
+</html>
