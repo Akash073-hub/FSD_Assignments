@@ -23,6 +23,14 @@ const games = [
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
 app.use(express.static(path.join(__dirname, "public")));
 
 app.locals.formatNumber = (value) => new Intl.NumberFormat("en-IN").format(value);
@@ -35,6 +43,12 @@ app.get("/home", (req, res) => {
     games,
     featuredGames: games.slice(0, 3)
   });
+});
+
+app.get("/api/items", (req, res) => res.json(items));
+
+app.post("/api/report", (req, res) => {
+  res.status(201).json({ message: "Report received", report: req.body });
 });
 
 app.get("/profile", (req, res) => {
