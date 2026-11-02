@@ -113,10 +113,10 @@ export default function SearchPage() {
               <span className="material-symbols-outlined">notifications</span>
               <span className="sp-notif-dot" />
             </button>
-            <button className="sp-icon-btn" title="Rules and safety" onClick={() => navigate("/rules")}>
+            <button className="sp-icon-btn" title="Support" onClick={() => navigate("/support")}>
               <span className="material-symbols-outlined">help</span>
             </button>
-            <div className="sp-avatar">JS</div>
+            <button type="button" className="sp-avatar" aria-label="Open profile" onClick={() => navigate("/profile")}>JS</button>
           </div>
         </div>
 

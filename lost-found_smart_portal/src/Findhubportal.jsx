@@ -15,8 +15,8 @@ export default function FindHubPortal() {
   const navigate = useNavigate();
   const routeLocation = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [category, setCategory] = useState("All Categories (6)");
-  const [location, setLocation] = useState("Everywhere (All Hubs)");
+  const [category, setCategory] = useState("All Categories");
+  const [location, setLocation] = useState("Everywhere");
   const [dateWindow, setDateWindow] = useState("Past 7 Days");
 
   const goToSearch = (query, nextFilters = {}) => {
@@ -66,10 +66,10 @@ export default function FindHubPortal() {
             <span className="material-symbols-outlined">notifications</span>
             <span className="nav-notif-dot" />
           </button>
-          <button className="nav-icon-btn" title="Rules and safety" onClick={() => navigate("/rules")}>
+          <button className="nav-icon-btn" title="Support" onClick={() => navigate("/support")}>
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>help</span>
           </button>
-          <div className="nav-avatar">JS</div>
+          <button type="button" className="nav-avatar" aria-label="Open profile" onClick={() => navigate("/profile")}>JS</button>
         </div>
       </nav>
 
@@ -83,7 +83,7 @@ export default function FindHubPortal() {
       </div>
 
       {/* ── PAGE ── */}
-      <div className="page">
+      <main className="page">
 
         {/* HERO */}
         <div className="hero">
@@ -144,7 +144,7 @@ export default function FindHubPortal() {
             <div className="stat-value">219</div>
             <div className="stat-sub">
               <CheckCircle size={12} color="#999" />
-              <span className="stat-link">Unclaimed items ready</span>
+              <button type="button" className="stat-link" onClick={() => goToSearch()}>Unclaimed items ready</button>
             </div>
           </div>
 
@@ -208,49 +208,39 @@ export default function FindHubPortal() {
             <div className="filter-row">
               <div className="filter-group">
                 <label>Category</label>
-                {/* Selecting a category navigates to search */}
                 <select
                   value={category}
-                  onChange={(e) => {
-                    const nextCategory = e.target.value;
-                    setCategory(nextCategory);
-                    goToSearch(searchQuery, { category: nextCategory });
-                  }}
+                  onChange={(e) => setCategory(e.target.value)}
                 >
-                  <option>All Categories (6)</option>
+                  <option>All Categories</option>
                   <option>Electronics</option>
-                  <option>Clothing</option>
+                  <option>Books &amp; Stationery</option>
+                  <option>IDs &amp; Cards</option>
+                  <option>Keys &amp; Wallets</option>
+                  <option>Bags &amp; Apparel</option>
                   <option>Accessories</option>
-                  <option>Documents</option>
-                  <option>Keys</option>
                 </select>
               </div>
               <div className="filter-group">
                 <label>Campus Hub / Location</label>
                 <select
                   value={location}
-                  onChange={(e) => {
-                    const nextLocation = e.target.value;
-                    setLocation(nextLocation);
-                    goToSearch(searchQuery, { location: nextLocation });
-                  }}
+                  onChange={(e) => setLocation(e.target.value)}
                 >
-                  <option>Everywhere (All Hubs)</option>
-                  <option>Main Library</option>
-                  <option>Dining Hall A</option>
-                  <option>Science Block</option>
-                  <option>Admin Building</option>
+                  <option>Everywhere</option>
+                  <option>North Campus Hub</option>
+                  <option>Main Library Wing</option>
+                  <option>Science Complex</option>
+                  <option>Engineering Hall</option>
+                  <option>Dining Commons</option>
+                  <option>Sports Center</option>
                 </select>
               </div>
               <div className="filter-group">
                 <label>Date Window</label>
                 <select
                   value={dateWindow}
-                  onChange={(e) => {
-                    const nextDateWindow = e.target.value;
-                    setDateWindow(nextDateWindow);
-                    goToSearch(searchQuery, { dateWindow: nextDateWindow });
-                  }}
+                  onChange={(e) => setDateWindow(e.target.value)}
                 >
                   <option>Past 7 Days</option>
                   <option>Past 30 Days</option>
@@ -264,7 +254,7 @@ export default function FindHubPortal() {
 
             {/* Main CTA → navigates to search */}
             <div className="search-btn-row">
-              <button className="search-btn" onClick={goToSearch}>
+              <button className="search-btn" type="button" onClick={() => goToSearch()}>
                 Search Reported Items
                 <span className="search-btn-badge">603 Items</span>
               </button>
@@ -309,7 +299,7 @@ export default function FindHubPortal() {
           </div>
 
         </div>
-      </div>
+      </main>
 
       {/* ── FOOTER ── */}
       <footer className="footer">
@@ -324,7 +314,7 @@ export default function FindHubPortal() {
           <a href="/home">Privacy Policy</a>
           <a href="/home">Terms of Service</a>
           <a href="/home">Campus Safety</a>
-          <a href="/home">Support Center</a>
+          <a href="/support" onClick={(event) => { event.preventDefault(); navigate("/support"); }}>Support Center</a>
           <a href="/home">Contact Hub Admin</a>
         </div>
       </footer>

@@ -53,11 +53,11 @@ export default function Notifications() {
                 <Icon name="notifications" filled />
                 <span className="nf-notif-badge">4</span>
               </button>
-              <button className="nf-help-btn" title="Rules and safety" onClick={() => navigate("/rules")}>
+              <button className="nf-help-btn" title="Support" onClick={() => navigate("/support")}>
                 <Icon name="help" />
               </button>
               <div className="nf-sep" />
-              <div className="nf-avatar">JS</div>
+              <button type="button" className="nf-avatar" aria-label="Open profile" onClick={() => navigate("/profile")}>JS</button>
             </div>
           </div>
         </div>

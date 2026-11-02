@@ -7,6 +7,7 @@ import ClaimPage from "./Claimpage";
 import ReportItem from "./Reportitem";
 import Notifications from "./Notifications";
 import RulesPage from "./Rulespage";
+import { ProfilePage, SupportPage } from "./PortalPages";
 import "./Theme.css";
 
 function LoginRoute() {
@@ -32,6 +33,8 @@ export default function App() {
                 <Route path="/report-item" element={<ReportItem />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/rules" element={<RulesPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/support" element={<SupportPage />} />
             </Routes>
         </BrowserRouter>
     );

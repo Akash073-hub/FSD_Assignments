@@ -111,7 +111,7 @@ export default function LoginPage({ onLoginSuccess, onForgotPassword }) {
               </svg>
               Official RVU Domain Verification
             </div>
-            <a href="#help" className="lp-support-link">
+            <a href="/support" className="lp-support-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
@@ -390,7 +390,7 @@ export default function LoginPage({ onLoginSuccess, onForgotPassword }) {
 
               {/* Footer links */}
               <div className="lp-card-footer">
-                <a href="#helpdesk" className="lp-helpdesk-link">
+                <a href="/support" className="lp-helpdesk-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
