@@ -55,6 +55,28 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000) in a browser. The development server reloads when source files change.
 
+### Start the Flask API
+
+In a second terminal, from this project directory:
+
+```bash
+python3 -m venv backend/.venv
+source backend/.venv/bin/activate
+pip install -r backend/requirements.txt
+python backend/app.py
+```
+
+The API runs at `http://localhost:5000`. The React app uses that address by default. To change it, set `REACT_APP_API_URL` before starting React (for example, `http://localhost:5000/api`).
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/health` | Check API status |
+| `GET` | `/api/items?q=&category=&location=` | Search reported items |
+| `POST` | `/api/items` | Create an item report |
+| `POST` | `/api/items/<item_id>/claims` | Submit an ownership claim |
+
+Reports and claims currently go into a temporary in-memory store and are cleared when Flask restarts. MongoDB integration is deferred. Image upload, authentication, and loading search results from the API are still pending.
+
 ## Available Scripts
 
 ### `npm start`
@@ -99,12 +121,12 @@ src/
 
 ## Current Implementation
 
-This version is a frontend prototype. The pages, navigation, form controls, validation messages, filters, and loading or success states run in the browser. Sample item records are currently stored in React files as arrays.
+The frontend is a prototype with an early Flask backend scaffold. Sample directory records are still stored in React files, while new reports and claims are submitted to the API's temporary in-memory store.
 
 The following production features still need a backend and database:
 
 - Real login, password reset, and protected routes
-- Saving reported items, claims, and notifications
+- Persistent saving of reported items, claims, and notifications (MongoDB is planned)
 - Image upload storage and file validation
 - Email or SMS OTP delivery
 - User roles for students, staff, and administrators

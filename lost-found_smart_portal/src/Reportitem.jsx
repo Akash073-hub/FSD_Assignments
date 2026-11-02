@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { apiRequest } from "./api";
 import "./Reportitem.css";
 
 export default function ReportPage() {
@@ -10,6 +11,25 @@ export default function ReportPage() {
   const [location, setLocation] = useState("Main Library Wing (Floor 3 - Study Pod 12)");
   const [color, setColor] = useState("white");
   const [date, setDate] = useState("2024-10-25");
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setSubmitMessage("");
+    setIsSubmitting(true);
+    try {
+      const result = await apiRequest("/items", {
+        method: "POST",
+        body: JSON.stringify({ title: itemTitle, category, location, color, date }),
+      });
+      setSubmitMessage(`Item reported successfully. Registry ID: ${result.item.registryId}`);
+    } catch (error) {
+      setSubmitMessage(`${error.message} Start the Flask API on port 5000 and try again.`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -43,10 +63,10 @@ export default function ReportPage() {
               <span className="material-symbols-outlined">notifications</span>
               <span className="rp-notif-dot" />
             </button>
-            <button className="rp-icon-btn" title="Rules and safety" onClick={() => navigate("/rules")}>
+            <button className="rp-icon-btn" title="Support" onClick={() => navigate("/support")}>
               <span className="material-symbols-outlined" style={{ fontSize: 20 }}>help</span>
             </button>
-            <div className="rp-avatar">JS</div>
+            <button type="button" className="rp-avatar" aria-label="Open profile" onClick={() => navigate("/profile")}>JS</button>
           </div>
         </div>
       </header>
@@ -197,7 +217,7 @@ export default function ReportPage() {
 
           {/* RIGHT: Form */}
           <section className="rp-right">
-            <form className="rp-form" onSubmit={e => e.preventDefault()}>
+            <form className="rp-form" onSubmit={handleSubmit}>
 
               {/* Form header */}
               <div className="rp-form-header">
@@ -338,10 +358,11 @@ export default function ReportPage() {
 
               {/* Submit */}
               <div className="rp-submit-area">
-                <button type="submit" className="rp-submit-btn">
+                <button type="submit" className="rp-submit-btn" disabled={isSubmitting}>
                   <span className="material-symbols-outlined" style={{ fontSize: 22, color: "#c59b4b" }}>database</span>
-                  Report Item
+                  {isSubmitting ? "Submitting…" : "Report Item"}
                 </button>
+                {submitMessage && <p role="status" aria-live="polite">{submitMessage}</p>}
                 <p className="rp-submit-note">
                   <span className="material-symbols-outlined" style={{ fontSize: 14, color: "#c59b4b" }}>shield</span>
                   Logged with Chain-of-Custody SHA-256 verification hash

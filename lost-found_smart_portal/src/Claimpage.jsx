@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { apiRequest } from "./api";
 import "./Claimpage.css";
 
 // Shared Material Symbols keep icon weight and geometry consistent across pages.
@@ -36,6 +37,7 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
   const [agreed, setAgreed] = useState(true);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
 
   const validate = () => {
     const e = {};
@@ -49,15 +51,25 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
     return e;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setSubmitMessage("");
+    const itemId = location.state?.item?.id || location.state?.id || "REG-8493";
+    try {
+      const result = await apiRequest(`/items/${encodeURIComponent(itemId)}/claims`, {
+        method: "POST",
+        body: JSON.stringify({ role: claimRole, email, narrative, usn, phone, altContact, agreed }),
+      });
+      setSubmitMessage(`Claim submitted for review. Claim ID: ${result.claim.id}`);
       if (onConfirm) onConfirm({ claimRole, email, narrative, usn, phone, altContact });
-    }, 1600);
+    } catch (error) {
+      setSubmitMessage(`${error.message} Start the Flask API on port 5000 and try again.`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -88,13 +100,13 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                 <Icon.Notification />
                 <span className="cp-notif-badge" aria-hidden="true">4</span>
               </button>
-              <button type="button" className="cp-icon-btn" aria-label="Rules and safety" onClick={() => navigate("/rules")}>
+              <button type="button" className="cp-icon-btn" aria-label="Support" onClick={() => navigate("/support")}>
                 <Icon.Help />
               </button>
               <div className="cp-divider" aria-hidden="true" />
-              <div className="cp-user" aria-label={`Signed in as ${user.name}`}>
+              <button type="button" className="cp-user" aria-label={`Open profile for ${user.name}`} onClick={() => navigate("/profile")}>
                 <div className="cp-avatar">{user.initials}</div>
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -484,6 +496,7 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                   )}
                 </button>
               </div>
+              {submitMessage && <p role="status" aria-live="polite">{submitMessage}</p>}
 
               {/* Security stamp */}
               <div className="cp-security-stamp">

@@ -2,6 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
 
 :root {
+  --layout-content-width: 1280px;
+  --layout-gutter: 24px;
+  --layout-main-top: 32px;
+  --layout-main-bottom: 48px;
   --theme-gold: #c59b4b;
   --theme-gold-hover: #d4aa5a;
   --theme-gold-deep: #7b580b;
@@ -24,14 +28,24 @@
 html,
 body,
 #root {
-  min-height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--theme-surface) !important;
   color: var(--theme-text);
   font-family: 'General Sans', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+#root { overflow-x: clip; }
 
 h1,
 h2,
@@ -131,6 +145,22 @@ button:not(:disabled):hover {
   box-shadow: 0 0 8px rgba(197, 155, 75, 0.8);
 }
 
+.nav-avatar,
+.sp-avatar,
+.rp-avatar,
+.nf-avatar {
+  border: 0;
+  cursor: pointer;
+  font-family: 'Clash Display', sans-serif !important;
+}
+
+.cp-user {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
 .nav-center.app-nav-links {
   flex-direction: row;
 }
@@ -167,43 +197,53 @@ button:not(:disabled):hover {
   transform: translate(-50%, -50%);
 }
 
-/* Shared shell spacing for equivalent page regions. */
+/* Shared shell width, gutters, and box model across all portal pages. */
 .nav,
 .sp-header-inner,
 .cp-header-inner,
 .lp-header-inner,
 .nf-nav-inner,
-.rp-header-inner {
-  padding-right: 24px !important;
-  padding-left: 24px !important;
-}
-
-.nav,
-.sp-header-inner,
-.cp-header-inner,
-.lp-header-inner,
-.nf-nav-inner,
-.rp-header-inner {
-  min-height: 64px;
-}
-
-.sp-header-inner,
-.cp-header-inner,
-.lp-header-inner,
-.nf-nav-inner,
-.rp-header-inner {
-  height: 64px;
-}
-
-.sub-bar,
+.rp-header-inner,
+.rules-header-inner,
 .sp-ribbon-inner,
 .cp-subbar-inner,
 .lp-subbar-inner,
 .nf-subbar-inner,
 .rp-subbar-inner {
+  width: 100%;
+  max-width: var(--layout-content-width);
+  margin-right: auto !important;
+  margin-left: auto !important;
+  padding-right: var(--layout-gutter) !important;
+  padding-left: var(--layout-gutter) !important;
+}
+
+/* Home navigation fills the viewport; only its contents stay on the shared grid. */
+.nav {
+  width: 100% !important;
+  max-width: none !important;
+  padding-right: max(var(--layout-gutter), calc((100% - var(--layout-content-width)) / 2 + var(--layout-gutter))) !important;
+  padding-left: max(var(--layout-gutter), calc((100% - var(--layout-content-width)) / 2 + var(--layout-gutter))) !important;
+}
+
+.nav,
+.sp-header-inner,
+.cp-header-inner,
+.lp-header-inner,
+.nf-nav-inner,
+.rp-header-inner,
+.rules-header-inner {
+  min-height: 64px !important;
+  height: 64px !important;
+}
+
+.sub-bar,
+.sp-ribbon,
+.cp-subbar,
+.lp-subbar,
+.nf-subbar,
+.rp-subbar {
   min-height: 40px;
-  padding-right: 24px !important;
-  padding-left: 24px !important;
 }
 
 .page,
@@ -211,8 +251,13 @@ button:not(:disabled):hover {
 .cp-main,
 .nf-page,
 .rp-main,
-.rules-main {
-  padding: 32px 24px 48px !important;
+.rules-main,
+.lp-main {
+  width: 100%;
+  max-width: var(--layout-content-width);
+  margin-right: auto !important;
+  margin-left: auto !important;
+  padding: var(--layout-main-top) var(--layout-gutter) var(--layout-main-bottom) !important;
 }
 
 .sp-breadcrumb,
@@ -246,6 +291,42 @@ button:not(:disabled):hover {
 
 .page .panel {
   padding: 24px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --layout-gutter: 16px;
+    --layout-main-top: 24px;
+    --layout-main-bottom: 40px;
+  }
+
+  .app-nav-links {
+    gap: 0;
+  }
+
+  .app-nav-link {
+    padding-right: 6px;
+    padding-left: 6px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 800px) {
+  .nav {
+    height: auto !important;
+    min-height: 64px !important;
+    flex-wrap: wrap;
+    row-gap: 10px;
+    padding-top: 12px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .nav .app-nav-links {
+    position: static !important;
+    order: 3;
+    width: 100%;
+    transform: none !important;
+  }
 }
 
 .cp-root {
