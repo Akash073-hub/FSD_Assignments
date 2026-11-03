@@ -225,6 +225,95 @@ html, body {
   font-family: 'DM Sans', sans-serif;
 }
 .nf-btn-dark:hover { background: #000; }
+.nf-btn-outline:disabled { opacity: .6; cursor: default; }
+
+.nf-action-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 12px 0;
+  padding: 11px 14px;
+  border: 1px solid #a7f3d0;
+  border-radius: 7px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-size: 13px;
+}
+.nf-action-message button { border: 0; background: transparent; color: inherit; cursor: pointer; font-size: 20px; }
+
+.nf-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(17, 19, 21, .58);
+  backdrop-filter: blur(3px);
+  animation: nf-fade-in 160ms ease-out;
+}
+
+.nf-settings-modal {
+  position: relative;
+  width: min(100%, 460px);
+  padding: 30px;
+  border: 1px solid rgba(197, 155, 75, .45);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .25);
+  animation: nf-modal-in 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+.nf-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.nf-modal-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  background: #fbf3df;
+  color: #a37b30;
+  font-size: 23px;
+}
+
+.nf-settings-modal h2 { margin: 0 0 8px; color: #111827; font-size: 23px; }
+.nf-settings-modal > p { margin: 0 0 20px; color: #6b7280; font-size: 13px; line-height: 1.6; }
+.nf-setting-options { display: grid; gap: 10px; }
+.nf-setting-options button {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+  text-align: left;
+}
+.nf-setting-options button.selected { border-color: #c59b4b; background: #fdf9ef; box-shadow: 0 0 0 2px rgba(197,155,75,.12); }
+.nf-setting-options button > span { display: flex; align-items: center; gap: 9px; color: #7b580b; }
+.nf-setting-options strong { color: #111827; font-size: 13px; }
+.nf-setting-options small { padding-left: 27px; color: #6b7280; font-size: 12px; }
+.nf-settings-done { width: 100%; margin-top: 18px; padding: 11px 16px; border: 0; border-radius: 7px; background: #111315; color: #fff; cursor: pointer; font-weight: 700; }
+
+@keyframes nf-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nf-modal-in { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
 /* tabs */
 .nf-tabs {
@@ -268,6 +357,10 @@ html, body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: border-color 0.15s;
 }
+.nf-card--read { border-left-color: #d1d5db !important; }
+.nf-card--read .nf-card-title { font-weight: 600; }
+.nf-unread-pill--clear { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
+.nf-unread-pill--clear .nf-unread-dot { background: #10b981; }
 .nf-card:hover { border-color: var(--n300); border-left-color: inherit; }
 .nf-card--gray   { border-left-color: var(--n400); }
 .nf-card--rose   { border: 1px solid var(--rose-200); border-left: 4px solid var(--rose-500); }

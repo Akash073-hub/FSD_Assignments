@@ -482,6 +482,34 @@ h1, h2, .sp-brand-name, .sp-footer-name {
   gap: 24px;
 }
 
+.sp-api-message { grid-column: 1 / -1; margin: 0; color: #777; font-size: 12px; }
+
+.sp-empty-state {
+  grid-column: 1 / -1;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 48px 24px;
+  border: 1px dashed #d2c5b3;
+  border-radius: 10px;
+  background: #fff;
+  color: #666;
+  text-align: center;
+}
+
+.sp-empty-state > .material-symbols-outlined {
+  color: #c59b4b;
+  font-size: 30px;
+}
+
+.sp-empty-state h2,
+.sp-empty-state p {
+  margin: 0;
+}
+
+.sp-empty-state h2 { color: #111315; font-size: 20px; }
+.sp-empty-state p { font-size: 13px; }
+
 .sp-item-card {
   background: #ffffff;
   border: 1px solid #E4E4E7;

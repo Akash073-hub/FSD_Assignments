@@ -55,27 +55,36 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000) in a browser. The development server reloads when source files change.
 
-### Start the Flask API
+### Start the Express API
 
 In a second terminal, from this project directory:
 
 ```bash
-python3 -m venv backend/.venv
-source backend/.venv/bin/activate
-pip install -r backend/requirements.txt
-python backend/app.py
+cd backend
+npm install
+cp .env.example .env
+npm run dev
 ```
 
-The API runs at `http://localhost:5000`. The React app uses that address by default. To change it, set `REACT_APP_API_URL` before starting React (for example, `http://localhost:5000/api`).
+The API runs at `http://localhost:5000`. Set `MONGODB_URI` in `backend/.env` to your MongoDB Atlas or local MongoDB connection string. Without it the server uses temporary in-memory demo data, which is cleared when it stops. The React app uses `http://localhost:5000/api` by default; set `REACT_APP_API_URL` to change it.
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | `GET` | `/api/health` | Check API status |
-| `GET` | `/api/items?q=&category=&location=` | Search reported items |
+| `GET` | `/api/items?q=&category=&location=&dateWindow=` | Search reported items |
+| `GET` | `/api/items/<item_id>` | Read one item record |
 | `POST` | `/api/items` | Create an item report |
+| `GET` | `/api/items/<item_id>/claims` | List claims for an item |
 | `POST` | `/api/items/<item_id>/claims` | Submit an ownership claim |
+| `GET` | `/api/claims/<claim_id>` | Read one claim |
+| `POST` | `/api/auth/request-otp` | Request a campus email OTP (development flow) |
+| `POST` | `/api/auth/login` | Verify OTP and create/update a user |
+| `GET` / `PUT` | `/api/users/<email>` | Read or update a user profile |
+| `GET` | `/api/notifications?email=` | Read notifications |
+| `PATCH` | `/api/notifications/<id>` | Mark a notification read/unread |
+| `POST` | `/api/support` | Create a support request |
 
-Reports and claims currently go into a temporary in-memory store and are cleared when Flask restarts. MongoDB integration is deferred. Image upload, authentication, and loading search results from the API are still pending.
+The Express API uses Mongoose models for users, items, claims, notifications, and support tickets. It seeds the sample item directory in memory until MongoDB is connected. OTP verification is a development scaffold: it returns a code in non-production mode and does not send email. Production authentication, email delivery, file uploads, and role-based access control need provider configuration and further implementation.
 
 ## Available Scripts
 
@@ -121,12 +130,12 @@ src/
 
 ## Current Implementation
 
-The frontend is a prototype with an early Flask backend scaffold. Sample directory records are still stored in React files, while new reports and claims are submitted to the API's temporary in-memory store.
+The frontend is a prototype. Reporting, directory loading, and claim submission use the Express API. A small sample list remains in React as an offline fallback for the directory.
 
 The following production features still need a backend and database:
 
 - Real login, password reset, and protected routes
-- Persistent saving of reported items, claims, and notifications (MongoDB is planned)
+- Persistent saving of reported items, claims, and user profiles (configure `MONGODB_URI`)
 - Image upload storage and file validation
 - Email or SMS OTP delivery
 - User roles for students, staff, and administrators

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiRequest } from "./api";
 import "./Loginpage.css";
 
 export default function LoginPage({ onLoginSuccess, onForgotPassword }) {
@@ -51,7 +52,7 @@ export default function LoginPage({ onLoginSuccess, onForgotPassword }) {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleSendOtp = () => {
+  const handleSendOtp = async () => {
     if (!formData.email.endsWith("@rvu.edu.in")) {
       setErrors((prev) => ({
         ...prev,
@@ -59,14 +60,19 @@ export default function LoginPage({ onLoginSuccess, onForgotPassword }) {
       }));
       return;
     }
-    setOtpSent(true);
-    setCountdown(45);
+    try {
+      const result = await apiRequest("/auth/request-otp", { method: "POST", body: JSON.stringify({ email: formData.email }) });
+      setOtpSent(true);
+      setCountdown(45);
+      if (result.developmentOtp) setFormData((prev) => ({ ...prev, otp: result.developmentOtp }));
+      setErrors((prev) => ({ ...prev, otp: undefined, email: undefined }));
+    } catch (error) {
+      setErrors((prev) => ({ ...prev, email: error.message }));
+    }
   };
 
   const handleResendOtp = () => {
-    if (countdown === 0) {
-      setCountdown(45);
-    }
+    if (countdown === 0) handleSendOtp();
   };
 
   const handleSubmit = async (e) => {
@@ -77,11 +83,16 @@ export default function LoginPage({ onLoginSuccess, onForgotPassword }) {
       return;
     }
     setIsSubmitting(true);
-    // Simulate auth — replace with real API call
-    setTimeout(() => {
+    try {
+      const result = await apiRequest("/auth/login", { method: "POST", body: JSON.stringify(formData) });
+      window.localStorage.setItem("findhub-user", JSON.stringify(result.user));
+      window.localStorage.setItem("findhub-token", result.token);
+      if (onLoginSuccess) onLoginSuccess(result.user);
+    } catch (error) {
+      setErrors((prev) => ({ ...prev, otp: error.message }));
+    } finally {
       setIsSubmitting(false);
-      if (onLoginSuccess) onLoginSuccess(formData);
-    }, 1500);
+    }
   };
 
   return (
