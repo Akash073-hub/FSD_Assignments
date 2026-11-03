@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { apiRequest } from "./api";
 import "./Claimpage.css";
@@ -19,25 +19,32 @@ const Icon = {
   Warehouse: createIcon("warehouse"), Phone: createIcon("phone"),
 };
 
-// ── Item thumbnail (wallet image) ─────────────────────────────
-const WALLET_IMG =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCoruhMnDIon6DFsCdfsz03yxRu0MSLhIDlyW_yu03tvjFwNfDSv3Oylhorook_a5k2cHnpQiQl_QDJx8cuNGAO-MmsX2Z4ms36LPVl7A3urLmAT5GjE88zdXvTWbL4GSIEW8jMSwcSUHIWM0CdzAlO2tPWXJ-0JorOV9rFT1O5bJ-wpKp6GHdfcxd1uilpc7Pr3zddjr4rVaFT-q6lhJLXjOHGSskZ2HGrxBZfTZvyDmT--qjGiZ0V";
-
 export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = currentUser || { name: "J. Sharma", initials: "JS", email: "j.sharma22@rvu.edu.in" };
+  let savedUser = null;
+  try { savedUser = JSON.parse(window.localStorage.getItem("findhub-user") || "null"); } catch { savedUser = null; }
+  const signedInUser = currentUser || savedUser;
+  const user = { name: signedInUser?.fullName || "FindHub user", initials: signedInUser?.fullName?.split(/\s+/).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "FH", email: signedInUser?.email || "" };
+  const itemId = location.state?.item?.registryId || location.state?.item?.id || location.state?.id || "REG-8493";
+  const [item, setItem] = useState(location.state?.item || null);
 
   const [claimRole, setClaimRole] = useState("owner");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(user.email);
   const [narrative, setNarrative] = useState("");
   const [usn, setUsn] = useState("");
   const [phone, setPhone] = useState("");
   const [altContact, setAltContact] = useState("");
-  const [agreed, setAgreed] = useState(true);
+  const [agreed, setAgreed] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    apiRequest(`/items/${encodeURIComponent(itemId)}`).then((result) => { if (active) setItem(result.item); }).catch((error) => { if (active) setSubmitMessage(error.message); });
+    return () => { active = false; };
+  }, [itemId]);
 
   const validate = () => {
     const e = {};
@@ -57,16 +64,15 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setIsSubmitting(true);
     setSubmitMessage("");
-    const itemId = location.state?.item?.id || location.state?.id || "REG-8493";
     try {
       const result = await apiRequest(`/items/${encodeURIComponent(itemId)}/claims`, {
         method: "POST",
         body: JSON.stringify({ role: claimRole, email, narrative, usn, phone, altContact, agreed }),
       });
-      setSubmitMessage(`Claim submitted for review. Claim ID: ${result.claim.id}`);
+      setSubmitMessage(`Claim submitted for review. Claim ID: ${result.claim._id || result.claim.id}`);
       if (onConfirm) onConfirm({ claimRole, email, narrative, usn, phone, altContact });
     } catch (error) {
-      setSubmitMessage(`${error.message} Start the Flask API on port 5000 and try again.`);
+      setSubmitMessage(error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -136,7 +142,7 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
           <span aria-hidden="true">/</span>
           <a href="/search">Directory Search</a>
           <span aria-hidden="true">/</span>
-          <span className="cp-crumb-code">#REG-8493</span>
+          <span className="cp-crumb-code">#{item?.registryId || itemId}</span>
           <span aria-hidden="true">/</span>
           <span className="cp-crumb-active">Verify Ownership</span>
         </nav>
@@ -174,12 +180,12 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                 <div>
                   <div className="cp-dossier-label">Registry Record</div>
                   <div className="cp-dossier-id-row">
-                    <span className="cp-reg-code">#REG-8493</span>
-                    <span className="cp-category-tag">IDs &amp; Wallets</span>
+                    <span className="cp-reg-code">#{item?.registryId || itemId}</span>
+                    <span className="cp-category-tag">{item?.category || "Loading item…"}</span>
                   </div>
                 </div>
                 <span className="cp-status-pending">
-                  <Icon.Clock /> Verification Pending
+                  <Icon.Clock /> {item?.status || "Loading status…"}
                 </span>
               </div>
 
@@ -188,21 +194,15 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                 {/* Thumbnail + title */}
                 <div className="cp-item-row">
                   <div className="cp-thumb-wrap">
-                    <img
-                      src={WALLET_IMG}
-                      alt="Black leather bifold wallet — custody item #REG-8493"
-                      className="cp-thumb-img"
-                    />
+                    {item?.images?.[0]?.dataUrl ? <img src={item.images[0].dataUrl} alt={`${item.title} item photo`} className="cp-thumb-img" /> : <div className="cp-thumb-img cp-thumb-placeholder"><span className="material-symbols-outlined">inventory_2</span></div>}
                     <span className="cp-evid-tag" aria-hidden="true">EVID-1</span>
                   </div>
                   <div className="cp-item-meta">
-                    <h2 className="cp-item-title">Black Leather Bifold Wallet</h2>
-                    <p className="cp-item-desc">
-                      Found unattended on lower dining booth seating during midday lunch hour.
-                    </p>
+                    <h2 className="cp-item-title">{item?.title || "Loading item details…"}</h2>
+                    <p className="cp-item-desc">{item?.description || "No additional description was provided."}</p>
                     <div className="cp-item-location">
                       <Icon.Warehouse />
-                      Locker #DC-104-B · Dining Commons West
+                      {item?.location || "Location not available"}
                     </div>
                   </div>
                 </div>
@@ -211,21 +211,15 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                 <table className="cp-meta-table" aria-label="Item custody details">
                   <tbody>
                     {[
-                      ["Logged", "Oct 23, 2024 · 13:42 IST"],
-                      ["Found at", "Dining Commons West (Table 14)"],
-                      ["Officer", "S. Vance (#SEC-882)"],
-                      ["Intake tag", "RVU-DCW-2024-8493-WAL"],
+                      ["Reported date", item?.date || "Loading"],
+                      ["Current status", item?.status || "Loading"],
+                      ["Category", item?.category || "Loading"],
+                      ["Color", item?.color || "Loading"],
                     ].map(([label, value], i) => (
                       <tr key={i} className={i % 2 === 0 ? "cp-meta-row" : "cp-meta-row cp-meta-row--alt"}>
                         <th className="cp-meta-th">{label}</th>
                         <td className="cp-meta-td">
-                          {label === "Officer" ? (
-                            <span className="cp-officer">
-                              <Icon.Badge /> {value}
-                            </span>
-                          ) : label === "Intake tag" ? (
-                            <code className="cp-code">{value}</code>
-                          ) : value}
+                          {value}
                         </td>
                       </tr>
                     ))}

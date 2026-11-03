@@ -10,7 +10,9 @@ FindHub is a React-based campus lost-and-found portal for reporting found items,
 - Item details and ownership verification flow
 - Claim submission form with ownership declaration and validation
 - New item reporting form
-- Notifications for AI matches, custody updates, and claim verification
+- Database-backed profiles, notifications, support tickets, item claims, and custody history
+- Staff claim review and support response pages
+- Validated item-photo uploads (JPEG, PNG, WebP)
 - Responsive academic-style interface with shared navigation and custody status indicators
 
 ## Application Routes
@@ -66,7 +68,7 @@ cp .env.example .env
 npm run dev
 ```
 
-The API runs at `http://localhost:5000`. Set `MONGODB_URI` in `backend/.env` to your MongoDB Atlas or local MongoDB connection string. Without it the server uses temporary in-memory demo data, which is cleared when it stops. The React app uses `http://localhost:5000/api` by default; set `REACT_APP_API_URL` to change it.
+The API runs at `http://localhost:5000`. Set `MONGODB_URI` and a stable, random `JWT_SECRET` in `backend/.env`. Without `MONGODB_URI`, the server uses temporary in-memory demo data, which is cleared when it stops. The React app uses `http://localhost:5000/api` by default; set `REACT_APP_API_URL` before building to change it.
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
@@ -79,12 +81,19 @@ The API runs at `http://localhost:5000`. Set `MONGODB_URI` in `backend/.env` to 
 | `GET` | `/api/claims/<claim_id>` | Read one claim |
 | `POST` | `/api/auth/request-otp` | Request a campus email OTP (development flow) |
 | `POST` | `/api/auth/login` | Verify OTP and create/update a user |
-| `GET` / `PUT` | `/api/users/<email>` | Read or update a user profile |
-| `GET` | `/api/notifications?email=` | Read notifications |
-| `PATCH` | `/api/notifications/<id>` | Mark a notification read/unread |
-| `POST` | `/api/support` | Create a support request |
+| `GET` / `PUT` | `/api/profile` | Read or update the signed-in profile |
+| `GET` | `/api/profile/activity` | Read saved account activity counts |
+| `GET`, `PATCH`, `DELETE` | `/api/notifications` | List, read, and dismiss signed-in notifications |
+| `POST` / `GET` | `/api/support` | Create or list signed-in support requests |
+| `GET` / `PATCH` | `/api/admin/claims` | Staff claim review queue and review actions |
+| `GET` / `POST` | `/api/items/<item_id>/custody` | Read or record item custody events |
+| `GET` / `PATCH` | `/api/admin/support` | Staff support queue and response actions |
 
-The Express API uses Mongoose models for users, items, claims, notifications, and support tickets. It seeds the sample item directory in memory until MongoDB is connected. OTP verification is a development scaffold: it returns a code in non-production mode and does not send email. Production authentication, email delivery, file uploads, and role-based access control need provider configuration and further implementation.
+The Express API stores users, items, claims, notifications, support tickets, and custody events in MongoDB when `MONGODB_URI` is configured. Item photos are validated and stored as small data URLs in MongoDB (up to four JPEG, PNG, or WebP files, 2 MB each). Login issues signed eight-hour bearer tokens; protected routes check the current account and staff role. To grant staff access, add trusted RVU addresses to `STAFF_EMAILS` or `ADMIN_EMAILS` in the backend environment. OTP generation is still development-only; production email delivery must be configured before production login can work.
+
+### Deployment configuration
+
+The API package has `build` and `start` scripts and listens on the hosting platform's `PORT`. For GoDaddy Node.js Hosting, deploy `backend/` as the API app and deploy the React app as a separate static React app. Set `REACT_APP_API_URL` to the deployed API URL plus `/api` before building the React app. Set `CLIENT_ORIGIN` on the API to the exact deployed frontend origin. Set `NODE_ENV=production`, `MONGODB_URI`, and a private random `JWT_SECRET` in the hosting provider's environment settings; never include production secrets in the source archive or Git. Publishing requires an eligible GoDaddy Web Hosting plan. See [GoDaddy's Node.js app requirements](https://developer.godaddy.com/en/docs/api-users/hosting/app-requirements) and [deployment guide](https://developer.godaddy.com/en/docs/api-users/hosting/workflows/deploy-nodejs-app).
 
 ## Available Scripts
 
@@ -130,16 +139,16 @@ src/
 
 ## Current Implementation
 
-The frontend is a prototype. Reporting, directory loading, and claim submission use the Express API. A small sample list remains in React as an offline fallback for the directory.
+Profiles, dashboard counts, notifications, support tickets, item reports and details, claims, claim review, and custody events use the Express API. The search page keeps its sample records as an offline fallback when the API cannot be reached. The API has in-memory demo storage only for local development when MongoDB is not configured; production startup requires MongoDB and a stable `JWT_SECRET`.
 
-The following production features still need a backend and database:
+The following production work still remains:
 
-- Real login, password reset, and protected routes
-- Persistent saving of reported items, claims, and user profiles (configure `MONGODB_URI`)
-- Image upload storage and file validation
-- Email or SMS OTP delivery
-- User roles for students, staff, and administrators
+- Email delivery for OTP and account recovery
+- A distributed production rate limiter and monitoring beyond the current per-process limits
+- Object storage for photos if usage grows beyond the small MongoDB image limits
 - Real-time or server-generated item matching
+- Production review of staff account provisioning and role assignment
+- Automated tests and deployment smoke checks
 
 ## Concepts Used
 

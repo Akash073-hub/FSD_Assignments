@@ -93,6 +93,7 @@ export default function SearchPage() {
         };
         setDirectoryItems(items.map((item) => ({
           ...item,
+          id: item.registryId || item.id || item._id,
           desc: item.description,
           date: dateLabel(item.date),
           categoryColor: categoryClass(item.category),
@@ -103,13 +104,13 @@ export default function SearchPage() {
         setApiMessage("");
       })
       .catch(() => {
-        if (active) setApiMessage("Showing sample items. Start the Flask API to load saved reports.");
+        if (active) setApiMessage("Showing sample items. Start the Express API to load saved reports.");
       });
     return () => { active = false; };
   }, []);
 
   const searchableItems = directoryItems.filter((item) => {
-    if (item.status === "Verification Pending" || item.status === "Claim In Progress") return false;
+    if (["Released", "Archived"].includes(item.status)) return false;
 
     const normalizedSearch = search.trim().toLocaleLowerCase();
     const searchableText = `${item.id} ${item.category} ${item.title} ${item.desc} ${item.location} ${item.status}`.toLocaleLowerCase();
@@ -341,7 +342,7 @@ export default function SearchPage() {
                 </div>
                 <button
                   className={`sp-action-btn ${item.btnClass}`}
-                  onClick={() => navigate(item.status === "Verification Pending" ? "/claim-details" : "/claim", { state: { id: item.id, item } })}
+                  onClick={() => navigate("/claim-details", { state: { id: item.id, item } })}
                 >
                   <span className="sp-action-default">{item.btnLabel}</span>
                   <span className="sp-action-hover">Verify Ownership</span>

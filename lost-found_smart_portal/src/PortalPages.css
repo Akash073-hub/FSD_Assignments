@@ -73,6 +73,29 @@
 .record-detail-meta span { color: #777; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
 .record-detail-meta strong { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
 .record-primary-action { margin-top: 20px; padding: 11px 16px; border: 1px solid #a37b30; border-radius: 6px; background: #c59b4b; color: #111315; cursor: pointer; font-weight: 700; }
+.record-secondary-action { margin: 20px 0 0 10px; padding: 11px 16px; border: 1px solid #d7d7d7; border-radius: 6px; background: #fff; color: #333; cursor: pointer; font-weight: 700; }
+.portal-feedback { padding: 12px 14px; border-radius: 7px; }
+.portal-feedback--error { background: #fff0ef; color: #9b1c16; }
+.support-form-card { margin-top: 20px; padding: 24px; }
+.support-form-card h2 { margin: 0 0 16px; font-size: 20px; }
+.support-request-form { display: grid; gap: 14px; }
+.support-request-form label, .admin-review-note { display: grid; gap: 7px; color: #666; font-size: 12px; font-weight: 700; }
+.support-request-form input, .support-request-form textarea, .admin-review-note input, .admin-review-note textarea { width: 100%; padding: 11px; border: 1px solid #d8d8d8; border-radius: 6px; background: #fff; color: #222; font: inherit; font-weight: 400; }
+.support-request-form textarea { resize: vertical; }
+.support-ticket { padding: 14px 0; border-top: 1px solid #eee; }
+.support-ticket > div { display: flex; justify-content: space-between; gap: 12px; }
+.support-ticket span, .support-ticket p { color: #666; font-size: 13px; }
+.custody-form { margin: 22px 0; padding: 18px; border: 1px solid #eee; border-radius: 8px; }
+.custody-form h3 { margin: 0; }
+.claim-status-row { display: grid; gap: 4px; margin-top: 14px; padding: 12px; border-radius: 7px; background: #f7f4ec; }
+.claim-status-row span { color: #666; font-size: 13px; }
+.detail-image-grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.detail-image-grid img { width: 140px; height: 120px; border-radius: 7px; object-fit: cover; }
+.admin-claim-card { margin: 14px 0; padding: 22px; }
+.admin-claim-card h2 { margin: 10px 0; font-size: 18px; }
+.admin-review-note { margin-top: 14px; }
+.admin-review-actions { display: flex; gap: 10px; }
+.admin-review-actions .record-primary-action, .admin-review-actions .profile-cancel-button { margin-top: 12px; }
 .custody-timeline { display: grid; gap: 0; margin: 24px 0 0; padding: 0; list-style: none; }
 .custody-timeline li { position: relative; display: grid; gap: 6px; padding: 0 0 22px 28px; border-left: 2px solid #e4d3ab; }
 .custody-timeline li:last-child { padding-bottom: 0; border-left-color: transparent; }

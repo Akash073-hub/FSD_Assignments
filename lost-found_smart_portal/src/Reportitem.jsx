@@ -6,32 +6,50 @@ import "./Reportitem.css";
 export default function ReportPage() {
   const navigate = useNavigate();
   const routeLocation = useLocation();
-  const [itemTitle, setItemTitle] = useState("Apple AirPods Pro (2nd Gen) with MagSafe Case");
+  const [itemTitle, setItemTitle] = useState("");
   const [category, setCategory] = useState("Electronics & Audio Equipment");
   const [location, setLocation] = useState("Main Library Wing (Floor 3 - Study Pod 12)");
   const [color, setColor] = useState("white");
-  const [date, setDate] = useState("2024-10-25");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [description, setDescription] = useState("");
+  const [photos, setPhotos] = useState([]);
   const [submitMessage, setSubmitMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const addPhotos = async (event) => {
+    const files = Array.from(event.target.files || []);
+    event.target.value = "";
+    if (photos.length + files.length > 4) { setSubmitMessage("You can attach up to 4 photos."); return; }
+    const validTypes = ["image/jpeg", "image/png", "image/webp"];
+    const selected = [];
+    try {
+      for (const file of files) {
+        if (!validTypes.includes(file.type)) { setSubmitMessage("Photos must be JPEG, PNG, or WebP."); return; }
+        if (file.size > 2 * 1024 * 1024) { setSubmitMessage("Each photo must be smaller than 2 MB."); return; }
+        const dataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = () => reject(new Error("Could not read the selected photo.")); reader.readAsDataURL(file);
+        });
+        selected.push({ name: file.name, contentType: file.type, dataUrl });
+      }
+      setPhotos((current) => [...current, ...selected]);
+      setSubmitMessage("");
+    } catch (error) {
+      setSubmitMessage(error.message);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitMessage("");
     setIsSubmitting(true);
     try {
-      let reportedByEmail = "";
-      try {
-        reportedByEmail = JSON.parse(window.localStorage.getItem("findhub-user") || "{}").email || "";
-      } catch {
-        reportedByEmail = "";
-      }
       const result = await apiRequest("/items", {
         method: "POST",
-        body: JSON.stringify({ title: itemTitle, category, location, color, date, reportedByEmail }),
+        body: JSON.stringify({ title: itemTitle, category, location, color, date, description, images: photos }),
       });
       setSubmitMessage(`Item reported successfully. Registry ID: ${result.item.registryId}`);
     } catch (error) {
-      setSubmitMessage(`${error.message} Start the Express API on port 5000 and try again.`);
+      setSubmitMessage(error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -135,26 +153,20 @@ export default function ReportPage() {
                 <div className="rp-camera-header-left">
                   <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#c59b4b" }}>photo_camera</span>
                   <span className="rp-camera-title">Item Photo Capture</span>
-                  <span className="rp-camera-ready-badge">Camera Ready</span>
+                  <span className="rp-camera-ready-badge">Photo upload enabled</span>
                 </div>
-                <button className="rp-switch-btn">
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>cameraswitch</span>
-                  Switch Camera
-                </button>
               </div>
 
               {/* Camera viewport */}
               <div className="rp-viewport">
                 <div className="rp-viewport-overlay" />
                 <div className="rp-viewport-content">
-                  <div className="rp-item-icon-circle">
-                    <span className="material-symbols-outlined" style={{ fontSize: 40, color: "#c59b4b" }}>headphones</span>
-                  </div>
-                  <h4 className="rp-viewport-title">Apple AirPods Pro (2nd Gen)</h4>
-                  <p className="rp-viewport-desc">White charging case with MagSafe. Clear focus acquired.</p>
+                  {photos[0] ? <img className="rp-viewport-photo" src={photos[0].dataUrl} alt="Primary selected item photo" /> : <div className="rp-item-icon-circle"><span className="material-symbols-outlined" style={{ fontSize: 40, color: "#c59b4b" }}>add_a_photo</span></div>}
+                  <h4 className="rp-viewport-title">{itemTitle || "Your item photo"}</h4>
+                  <p className="rp-viewport-desc">{photos[0]?.name || "Upload a clear photo to preview it here."}</p>
                   <div className="rp-frame-ready">
                     <span className="rp-frame-dot" />
-                    Photo Frame Ready
+                    {photos.length ? `${photos.length} photo${photos.length === 1 ? "" : "s"} selected` : "No photo selected"}
                   </div>
                 </div>
                 <div className="rp-viewport-footer">
@@ -168,15 +180,15 @@ export default function ReportPage() {
                 <label className="rp-upload-btn">
                   <span className="material-symbols-outlined" style={{ fontSize: 16, color: "#c59b4b" }}>upload_file</span>
                   Upload File
-                  <input type="file" accept="image/*" style={{ display: "none" }} />
+                  <input id="rp-photo-upload" type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={addPhotos} style={{ display: "none" }} />
                 </label>
-                <button className="rp-take-photo-btn">
+                <label htmlFor="rp-photo-upload" className="rp-take-photo-btn">
                   <span className="material-symbols-outlined" style={{ fontSize: 20 }}>photo_camera</span>
-                  Take Photo
-                </button>
-                <button className="rp-retake-btn">
+                  Choose Photos
+                </label>
+                <button type="button" className="rp-retake-btn" onClick={() => setPhotos([])} disabled={!photos.length}>
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>refresh</span>
-                  Retake
+                  Clear Photos
                 </button>
               </div>
             </div>
@@ -188,34 +200,14 @@ export default function ReportPage() {
                   <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#c59b4b" }}>collections</span>
                   Item Photo Gallery
                 </h3>
-                <span className="rp-gallery-count">2 of 4 photos added</span>
+                <span className="rp-gallery-count">{photos.length} of 4 photos added</span>
               </div>
               <div className="rp-gallery-grid">
-                {/* Photo 1 */}
-                <div className="rp-photo rp-photo--active">
-                  <div className="rp-photo-bg">
-                    <span className="material-symbols-outlined" style={{ fontSize: 36, color: "#555" }}>headphones</span>
-                  </div>
-                  <div className="rp-photo-label">
-                    <span className="rp-photo-angle">Front Angle</span>
-                    <span className="rp-photo-primary">Primary</span>
-                  </div>
-                </div>
-                {/* Photo 2 */}
-                <div className="rp-photo">
-                  <div className="rp-photo-bg">
-                    <span className="material-symbols-outlined" style={{ fontSize: 36, color: "#555" }}>flip_camera_android</span>
-                  </div>
-                  <div className="rp-photo-label">
-                    <span className="rp-photo-angle">Back / Engraving</span>
-                    <span className="rp-photo-attached">Attached</span>
-                  </div>
-                </div>
-                {/* Add photo */}
-                <div className="rp-photo-add">
+                {photos.map((photo, index) => <div className="rp-photo rp-photo--active" key={`${photo.name}-${index}`}><img className="rp-photo-preview" src={photo.dataUrl} alt={`Selected item photo ${index + 1}`} /><div className="rp-photo-label"><span className="rp-photo-angle">{photo.name}</span><button type="button" className="rp-photo-remove" onClick={() => setPhotos((current) => current.filter((_, photoIndex) => photoIndex !== index))} aria-label={`Remove ${photo.name}`}>×</button></div></div>)}
+                {photos.length < 4 && <button type="button" className="rp-photo-add" onClick={() => document.getElementById("rp-photo-upload")?.click()}>
                   <span className="material-symbols-outlined" style={{ fontSize: 24, color: "#aaa" }}>add_a_photo</span>
                   <span className="rp-photo-add-label">+ Add Another Angle</span>
-                </div>
+                </button>}
               </div>
             </div>
 
@@ -232,7 +224,7 @@ export default function ReportPage() {
                     <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#c59b4b" }}>edit_document</span>
                     Item Specifications
                   </h2>
-                  <span className="rp-reg-badge">REG-AUTO #8501</span>
+              <span className="rp-reg-badge">Registry ID assigned on save</span>
                 </div>
                 <p className="rp-form-desc">Verify item description, color, and location details prior to custody registration.</p>
               </div>
@@ -241,10 +233,7 @@ export default function ReportPage() {
               <div className="rp-field">
                 <div className="rp-field-label-row">
                   <label className="rp-label">Item Title</label>
-                  <span className="rp-ai-detected">
-                    <span className="material-symbols-outlined" style={{ fontSize: 12 }}>auto_awesome</span>
-                    AI Detected
-                  </span>
+                  <span className="rp-ai-detected">Required</span>
                 </div>
                 <div className="rp-input-wrap">
                   <span className="rp-input-icon material-symbols-outlined" style={{ fontSize: 18 }}>label</span>
@@ -252,9 +241,18 @@ export default function ReportPage() {
                     type="text"
                     className="rp-input"
                     value={itemTitle}
+                    maxLength={120}
+                    required
+                    placeholder="Describe the found item"
                     onChange={e => setItemTitle(e.target.value)}
                   />
                 </div>
+              </div>
+
+              <div className="rp-field">
+                <label className="rp-label" htmlFor="rp-description">Description <span className="rp-required">*</span></label>
+                <textarea id="rp-description" className="rp-textarea" required minLength={10} maxLength={1500} rows={4} value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Include identifying details, marks, or contents. Do not list sensitive information." />
+                <small>{description.length}/1500 characters</small>
               </div>
 
               {/* Category */}
@@ -262,7 +260,7 @@ export default function ReportPage() {
                 <label className="rp-label">Category <span className="rp-required">*</span></label>
                 <div className="rp-select-wrap">
                   <span className="rp-input-icon material-symbols-outlined" style={{ fontSize: 18 }}>category</span>
-                  <select className="rp-select" value={category} onChange={e => setCategory(e.target.value)}>
+                  <select className="rp-select" value={category} required onChange={e => setCategory(e.target.value)}>
                     <option>Electronics &amp; Audio Equipment</option>
                     <option>IDs, Cards &amp; Wallets</option>
                     <option>Books, Notebooks &amp; Stationery</option>
@@ -279,7 +277,7 @@ export default function ReportPage() {
                 <label className="rp-label">Location <span className="rp-required">*</span></label>
                 <div className="rp-select-wrap">
                   <span className="rp-input-icon material-symbols-outlined" style={{ fontSize: 18 }}>location_on</span>
-                  <select className="rp-select" value={location} onChange={e => setLocation(e.target.value)}>
+                  <select className="rp-select" value={location} required onChange={e => setLocation(e.target.value)}>
                     <option>Main Library Wing (Floor 3 - Study Pod 12)</option>
                     <option>Science &amp; Engineering Complex (Room 204)</option>
                     <option>Dining Commons West (Main Hall)</option>
@@ -301,7 +299,7 @@ export default function ReportPage() {
                 <label className="rp-label">Color <span className="rp-required">*</span></label>
                 <div className="rp-select-wrap">
                   <span className="rp-input-icon material-symbols-outlined" style={{ fontSize: 18 }}>palette</span>
-                  <select className="rp-select" value={color} onChange={e => setColor(e.target.value)}>
+                  <select className="rp-select" value={color} required onChange={e => setColor(e.target.value)}>
                     <option value="white">White / Off-White</option>
                     <option value="black">Black / Matte Black</option>
                     <option value="silver">Silver / Gray</option>
@@ -342,6 +340,7 @@ export default function ReportPage() {
                   <input
                     type="date"
                     className="rp-input rp-input--date"
+                    required
                     value={date}
                     onChange={e => setDate(e.target.value)}
                   />
@@ -357,9 +356,7 @@ export default function ReportPage() {
                   </span>
                   <span className="rp-in-storage">IN_STORAGE</span>
                 </div>
-                <p className="rp-custody-desc">
-                  Item will be placed into Locker <strong>#LIB-302-A</strong> at Library Central Custody upon submission.
-                </p>
+                <p className="rp-custody-desc">The item is added to the registry as <strong>In Storage</strong>. Staff can record verified custody locations from the custody log.</p>
               </div>
 
               {/* Submit */}
@@ -371,7 +368,7 @@ export default function ReportPage() {
                 {submitMessage && <p role="status" aria-live="polite">{submitMessage}</p>}
                 <p className="rp-submit-note">
                   <span className="material-symbols-outlined" style={{ fontSize: 14, color: "#c59b4b" }}>shield</span>
-                  Logged with Chain-of-Custody SHA-256 verification hash
+                  Saved to the signed-in campus account with a registry timestamp
                 </p>
               </div>
 
