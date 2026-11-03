@@ -194,7 +194,7 @@ export default function ClaimPage({ onConfirm, onCancel, currentUser }) {
                 {/* Thumbnail + title */}
                 <div className="cp-item-row">
                   <div className="cp-thumb-wrap">
-                    {item?.images?.[0]?.dataUrl ? <img src={item.images[0].dataUrl} alt={`${item.title} item photo`} className="cp-thumb-img" /> : <div className="cp-thumb-img cp-thumb-placeholder"><span className="material-symbols-outlined">inventory_2</span></div>}
+                    {item?.images?.[0]?.dataUrl ? <img src={item.images[0].dataUrl} alt={item.title} className="cp-thumb-img" /> : <div className="cp-thumb-img cp-thumb-placeholder"><span className="material-symbols-outlined">inventory_2</span></div>}
                     <span className="cp-evid-tag" aria-hidden="true">EVID-1</span>
                   </div>
                   <div className="cp-item-meta">
