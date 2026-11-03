@@ -19,9 +19,15 @@ export default function ReportPage() {
     setSubmitMessage("");
     setIsSubmitting(true);
     try {
+      let reportedByEmail = "";
+      try {
+        reportedByEmail = JSON.parse(window.localStorage.getItem("findhub-user") || "{}").email || "";
+      } catch {
+        reportedByEmail = "";
+      }
       const result = await apiRequest("/items", {
         method: "POST",
-        body: JSON.stringify({ title: itemTitle, category, location, color, date }),
+        body: JSON.stringify({ title: itemTitle, category, location, color, date, reportedByEmail }),
       });
       setSubmitMessage(`Item reported successfully. Registry ID: ${result.item.registryId}`);
     } catch (error) {
