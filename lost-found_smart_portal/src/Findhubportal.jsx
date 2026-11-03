@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { apiRequest } from "./api";
 import "./Findhubportal.css";
 import {
   Search,
@@ -18,6 +19,9 @@ export default function FindHubPortal() {
   const [category, setCategory] = useState("All Categories");
   const [location, setLocation] = useState("Everywhere");
   const [dateWindow, setDateWindow] = useState("Past 7 Days");
+  const [stats, setStats] = useState({ totalTracked: 0, activeCases: 0, inCustody: 0, reunited: 0 });
+
+  useEffect(() => { apiRequest("/dashboard/stats").then(setStats).catch(() => {}); }, []);
 
   const goToSearch = (query, nextFilters = {}) => {
     const queryText = typeof query === "string" ? query : searchQuery;
@@ -115,23 +119,23 @@ export default function FindHubPortal() {
                 <AlignJustify size={12} color="#999" />
               </div>
             </div>
-            <div className="stat-value">1,428</div>
+            <div className="stat-value">{stats.totalTracked.toLocaleString()}</div>
             <div className="stat-sub">
               <TrendingUp size={12} color="#999" />
-              <strong>+12% this week</strong>&nbsp;in circulation
+              Live registry total
             </div>
           </div>
 
           {/* Active Lost Cases */}
           <div className="stat-card stat-card--bordered">
             <div className="stat-top">
-              <span className="stat-label">Active Lost Cases</span>
-              <span className="badge badge--searching">Searching</span>
+              <span className="stat-label">Active Registry Items</span>
+              <span className="badge badge--searching">Open</span>
             </div>
-            <div className="stat-value">384</div>
+            <div className="stat-value">{stats.activeCases.toLocaleString()}</div>
             <div className="stat-sub">
               <Search size={12} color="#999" />
-              Avg resolution: 18 hours
+              Active items in registry
             </div>
           </div>
 
@@ -141,7 +145,7 @@ export default function FindHubPortal() {
               <span className="stat-label">At Custody Hubs</span>
               <span className="badge badge--storage">In Storage</span>
             </div>
-            <div className="stat-value">219</div>
+            <div className="stat-value">{stats.inCustody.toLocaleString()}</div>
             <div className="stat-sub">
               <CheckCircle size={12} color="#999" />
               <button type="button" className="stat-link" onClick={() => goToSearch()}>Unclaimed items ready</button>
@@ -151,13 +155,13 @@ export default function FindHubPortal() {
           {/* Reunited Owners */}
           <div className="stat-card">
             <div className="stat-top">
-              <span className="stat-label">Reunited Owners</span>
-              <span className="badge badge--rate">87% Rate</span>
+              <span className="stat-label">Items Released</span>
+              <span className="badge badge--rate">Released</span>
             </div>
-            <div className="stat-value">825</div>
+            <div className="stat-value">{stats.reunited.toLocaleString()}</div>
             <div className="stat-sub">
               <RefreshCw size={12} color="#999" />
-              Verified returns complete
+              Staff-confirmed releases
             </div>
           </div>
 
