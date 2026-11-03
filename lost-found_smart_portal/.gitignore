@@ -10,6 +10,10 @@
 
 # production
 /build
+/backend/.venv/
+/backend/__pycache__/
+/backend/findhub.sqlite3
+/backend/.env
 
 # misc
 .DS_Store

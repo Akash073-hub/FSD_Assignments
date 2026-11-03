@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { apiRequest } from "./api";
 import "./Searchpage.css";
 
 const ITEMS = [
@@ -73,13 +74,79 @@ export default function SearchPage() {
   const navigate = useNavigate();
   const routeLocation = useLocation();
   const searchState = routeLocation.state || {};
-  const searchableItems = ITEMS.filter(
-    (item) => item.status !== "Verification Pending" && item.status !== "Claim In Progress"
-  );
+  const [directoryItems, setDirectoryItems] = useState(ITEMS);
+  const [apiMessage, setApiMessage] = useState("");
   const [search, setSearch] = useState(searchState.query || "");
   const [category, setCategory] = useState(searchState.category || "All Categories");
   const [location, setLocation] = useState(searchState.location || "Everywhere");
   const [dateWindow, setDateWindow] = useState(searchState.dateWindow || "All Time");
+
+  useEffect(() => {
+    let active = true;
+    apiRequest("/items")
+      .then(({ items = [] }) => {
+        if (!active) return;
+        const categoryClass = (value) => value === "Electronics" ? "cat-electronics" : ["Books & Stationery", "Bags & Apparel"].includes(value) ? "cat-purple" : "cat-neutral";
+        const dateLabel = (value) => {
+          const parsed = new Date(`${value}T00:00:00`);
+          return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        };
+        setDirectoryItems(items.map((item) => ({
+          ...item,
+          desc: item.description,
+          date: dateLabel(item.date),
+          categoryColor: categoryClass(item.category),
+          statusColor: item.status === "In Storage" ? "status-green" : "status-yellow",
+          btnLabel: item.status === "Verification Pending" ? "Verify Ownership" : "View Details & Claim",
+          btnClass: item.status === "Verification Pending" ? "btn-gold" : "btn-dark",
+        })));
+        setApiMessage("");
+      })
+      .catch(() => {
+        if (active) setApiMessage("Showing sample items. Start the Flask API to load saved reports.");
+      });
+    return () => { active = false; };
+  }, []);
+
+  const searchableItems = directoryItems.filter((item) => {
+    if (item.status === "Verification Pending" || item.status === "Claim In Progress") return false;
+
+    const normalizedSearch = search.trim().toLocaleLowerCase();
+    const searchableText = `${item.id} ${item.category} ${item.title} ${item.desc} ${item.location} ${item.status}`.toLocaleLowerCase();
+    if (normalizedSearch && !searchableText.includes(normalizedSearch)) return false;
+
+    const normalizedCategory = item.category === "IDs & Wallets" ? "IDs & Cards" : item.category;
+    if (category !== "All Categories" && normalizedCategory !== category) return false;
+
+    if (location !== "Everywhere") {
+      const locationTerms = {
+        "North Campus Hub": ["North Campus", "Transit Pavilion"],
+        "Main Library Wing": ["Main Library"],
+        "Science Complex": ["Science Complex"],
+        "Engineering Hall": ["Engineering"],
+        "Dining Commons": ["Dining Commons"],
+        "Sports Center": ["Sports Center"],
+      }[location] || [location];
+      if (!locationTerms.some((term) => item.location.toLocaleLowerCase().includes(term.toLocaleLowerCase()))) return false;
+    }
+
+    if (dateWindow !== "All Time") {
+      const itemDate = new Date(item.date);
+      const days = dateWindow === "Past 24 Hours" ? 1 : dateWindow === "Past 7 Days" ? 7 : 30;
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - days);
+      if (Number.isNaN(itemDate.getTime()) || itemDate < cutoff) return false;
+    }
+
+    return true;
+  });
+
+  const resetFilters = () => {
+    setSearch("");
+    setCategory("All Categories");
+    setLocation("Everywhere");
+    setDateWindow("All Time");
+  };
 
   return (
     <>
@@ -170,6 +237,7 @@ export default function SearchPage() {
               placeholder="Type exact item name, brand, model, or description..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search reported items"
             />
             <kbd className="sp-kbd">⌘K</kbd>
           </div>
@@ -224,7 +292,7 @@ export default function SearchPage() {
           <div className="sp-sort-bar">
             <span className="sp-item-count">{searchableItems.length} Items Found</span>
             <div className="sp-sort-actions">
-              <button className="sp-reset-btn">
+              <button type="button" className="sp-reset-btn" onClick={resetFilters}>
                 <span className="material-symbols-outlined" style={{ fontSize: 16 }}>refresh</span>
                 Reset Filters
               </button>
@@ -239,7 +307,8 @@ export default function SearchPage() {
 
         {/* Items grid */}
         <div className="sp-items-grid">
-          {searchableItems.map((item) => (
+          {apiMessage && <p className="sp-api-message" role="status">{apiMessage}</p>}
+          {searchableItems.length ? searchableItems.map((item) => (
             <div className="sp-item-card" key={item.id}>
               <div className="sp-item-top">
                 {/* Category + ID */}
@@ -272,14 +341,21 @@ export default function SearchPage() {
                 </div>
                 <button
                   className={`sp-action-btn ${item.btnClass}`}
-                  onClick={() => navigate("/claim")}
+                  onClick={() => navigate(item.status === "Verification Pending" ? "/claim-details" : "/claim", { state: { id: item.id, item } })}
                 >
                   <span className="sp-action-default">{item.btnLabel}</span>
                   <span className="sp-action-hover">Verify Ownership</span>
                 </button>
               </div>
             </div>
-          ))}
+          )) : (
+            <div className="sp-empty-state">
+              <span className="material-symbols-outlined" aria-hidden="true">search_off</span>
+              <h2>No matching items</h2>
+              <p>Try a different search term or loosen one of the filters.</p>
+              <button type="button" className="sp-reset-btn" onClick={resetFilters}>Clear search and filters</button>
+            </div>
+          )}
         </div>
 
         {/* Pagination */}

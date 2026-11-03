@@ -25,7 +25,7 @@ export default function ReportPage() {
       });
       setSubmitMessage(`Item reported successfully. Registry ID: ${result.item.registryId}`);
     } catch (error) {
-      setSubmitMessage(`${error.message} Start the Flask API on port 5000 and try again.`);
+      setSubmitMessage(`${error.message} Start the Express API on port 5000 and try again.`);
     } finally {
       setIsSubmitting(false);
     }
