@@ -15,7 +15,7 @@ const itemSchema = new mongoose.Schema({
   registryId: { type: String, unique: true, index: true }, title: { type: String, required: true },
   category: { type: String, required: true }, location: { type: String, required: true }, color: { type: String, required: true },
   date: { type: String, required: true }, description: { type: String, default: "" }, status: { type: String, default: "In Storage" },
-  reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+  reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null }, reportedByEmail: { type: String, default: "" },
 }, { timestamps: true });
 itemSchema.index({ title: "text", description: "text", category: "text", location: "text", color: "text" });
 const claimSchema = new mongoose.Schema({ item: { type: mongoose.Schema.Types.ObjectId, ref: "Item", required: true }, itemId: String, role: String, email: String, narrative: String, usn: String, phone: String, altContact: String, status: { type: String, default: "pending" } }, { timestamps: true });
@@ -61,11 +61,11 @@ app.get("/api/health", (_req, res) => res.json({ status: "ok", storage: mongoCon
 app.get("/api/items", asyncRoute(async (req, res) => { const items = await listItems(req.query); res.json({ items, count: items.length }); }));
 app.get("/api/items/:id", asyncRoute(async (req, res) => { const item = await getItem(req.params.id); item ? res.json({ item }) : fail(res, "Item was not found.", 404); }));
 app.post("/api/items", asyncRoute(async (req, res) => {
-  const { title, category, location, color, date, description = "" } = req.body || {};
+  const { title, category, location, color, date, description = "", reportedByEmail = "" } = req.body || {};
   if (![title, category, location, color, date].every((v) => typeof v === "string" && v.trim())) return fail(res, "title, category, location, color, and date are required.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(date))) return fail(res, "date must use YYYY-MM-DD format.");
   const items = await listItems(); const last = Math.max(8499, ...items.map((i) => Number(String(i.registryId).replace("REG-", "")) || 0));
-  const values = { registryId: `REG-${last + 1}`, title: title.trim(), category: category.trim(), location: location.trim(), color: color.trim(), date, description: String(description).trim(), status: "In Storage" };
+  const values = { registryId: `REG-${last + 1}`, title: title.trim(), category: category.trim(), location: location.trim(), color: color.trim(), date, description: String(description).trim(), status: "In Storage", reportedByEmail: String(reportedByEmail).trim().toLowerCase() };
   const item = mongoConnected ? await Item.create(values) : { ...values, _id: values.registryId, createdAt: new Date() };
   if (!mongoConnected) memory.items.push(item);
   res.status(201).json({ item, registryId: item.registryId });
