@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Bell, CircleHelp, GraduationCap, Mail, MapPin, ShieldCheck, UserRound, ClipboardCheck, Clock3, LockKeyhole, Pencil, Check, X, Send } from "lucide-react";
 import { apiRequest } from "./api";
@@ -89,8 +89,8 @@ export function ClaimDetailsPage() {
 export function CustodyLogPage() {
   const navigate = useNavigate(); const { itemId, item: routeItem } = useRouteItem(); const [item, setItem] = useState(routeItem); const [events, setEvents] = useState([]); const [error, setError] = useState(""); const [form, setForm] = useState({ event: "Item checked into custody", location: "", locker: "", status: "In Storage", notes: "" }); const [busy, setBusy] = useState(false);
   const user = readUser(); const canRecord = ["staff", "admin"].includes(user?.role);
-  const load = () => apiRequest(`/items/${encodeURIComponent(itemId)}/custody`).then((result) => { setItem(result.item); setEvents(result.events || []); }).catch((cause) => setError(cause.message));
-  useEffect(() => { load(); }, [itemId]);
+  const load = useCallback(() => apiRequest(`/items/${encodeURIComponent(itemId)}/custody`).then((result) => { setItem(result.item); setEvents(result.events || []); }).catch((cause) => setError(cause.message)), [itemId]);
+  useEffect(() => { load(); }, [load]);
   const recordEvent = async (event) => { event.preventDefault(); setBusy(true); setError(""); try { await apiRequest(`/items/${encodeURIComponent(itemId)}/custody`, { method: "POST", body: JSON.stringify(form) }); setForm({ event: "", location: "", locker: "", status: "In Storage", notes: "" }); await load(); } catch (cause) { setError(cause.message); } finally { setBusy(false); } };
   return <PortalShell><button className="portal-back" onClick={() => window.history.back()} type="button"><ArrowLeft size={16} /> Back</button><div className="portal-heading"><span className="portal-eyebrow"><LockKeyhole size={16} /> SECURE CUSTODY RECORD</span><h1>Custody Log</h1><p>Database-recorded custody events for this FindHub item.</p></div>
     {error && <p className="portal-feedback portal-feedback--error" role="alert">{error}</p>}{item && <section className="portal-card record-detail-card"><div className="record-detail-top"><div className="support-icon"><LockKeyhole size={22} /></div><span className="record-status"><ShieldCheck size={14} /> {item.status}</span></div><span className="record-id">#{item.registryId || itemId}</span><h2>{item.title}</h2><p>{item.location} · {item.category}</p>
