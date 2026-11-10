@@ -161,7 +161,7 @@ export default function ReportPage() {
               <div className="rp-viewport">
                 <div className="rp-viewport-overlay" />
                 <div className="rp-viewport-content">
-                  {photos[0] ? <img className="rp-viewport-photo" src={photos[0].dataUrl} alt="Selected item" /> : <div className="rp-item-icon-circle"><span className="material-symbols-outlined" style={{ fontSize: 40, color: "#c59b4b" }}>add_a_photo</span></div>}
+                  {photos[0] ? <img className="rp-viewport-photo" src={photos[0].dataUrl} alt={itemTitle || "Reported item"} /> : <div className="rp-item-icon-circle"><span className="material-symbols-outlined" style={{ fontSize: 40, color: "#c59b4b" }}>add_a_photo</span></div>}
                   <h4 className="rp-viewport-title">{itemTitle || "Your item photo"}</h4>
                   <p className="rp-viewport-desc">{photos[0]?.name || "Upload a clear photo to preview it here."}</p>
                   <div className="rp-frame-ready">
@@ -203,7 +203,7 @@ export default function ReportPage() {
                 <span className="rp-gallery-count">{photos.length} of 4 photos added</span>
               </div>
               <div className="rp-gallery-grid">
-                {photos.map((photo, index) => <div className="rp-photo rp-photo--active" key={`${photo.name}-${index}`}><img className="rp-photo-preview" src={photo.dataUrl} alt={`Selected item ${index + 1}`} /><div className="rp-photo-label"><span className="rp-photo-angle">{photo.name}</span><button type="button" className="rp-photo-remove" onClick={() => setPhotos((current) => current.filter((_, photoIndex) => photoIndex !== index))} aria-label={`Remove ${photo.name}`}>×</button></div></div>)}
+                {photos.map((photo, index) => <div className="rp-photo rp-photo--active" key={`${photo.name}-${index}`}><img className="rp-photo-preview" src={photo.dataUrl} alt={`${itemTitle || "Reported item"}, angle ${index + 1}`} /><div className="rp-photo-label"><span className="rp-photo-angle">{photo.name}</span><button type="button" className="rp-photo-remove" onClick={() => setPhotos((current) => current.filter((_, photoIndex) => photoIndex !== index))} aria-label={`Remove ${photo.name}`}>×</button></div></div>)}
                 {photos.length < 4 && <button type="button" className="rp-photo-add" onClick={() => document.getElementById("rp-photo-upload")?.click()}>
                   <span className="material-symbols-outlined" style={{ fontSize: 24, color: "#aaa" }}>add_a_photo</span>
                   <span className="rp-photo-add-label">+ Add Another Angle</span>

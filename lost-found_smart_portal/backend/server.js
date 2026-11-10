@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 const app = express();
 const port = Number(process.env.PORT || 5000);
 const mongoUri = process.env.MONGODB_URI;
-const mongoConfigured = Boolean(mongoUri);
+let mongoConfigured = Boolean(mongoUri);
 const jwtSecret = process.env.JWT_SECRET || crypto.randomBytes(32).toString("hex");
 if (!process.env.JWT_SECRET) console.warn("JWT_SECRET is unset; login tokens will be invalidated when the server restarts.");
 if (process.env.NODE_ENV === "production" && !process.env.JWT_SECRET) throw new Error("Set JWT_SECRET before starting in production.");
@@ -209,7 +209,7 @@ app.post("/api/auth/request-otp", (req, res) => {
   const recent = previous.filter((time) => now - time < 15 * 60 * 1000); if (recent.length >= 5) return fail(res, "Too many code requests. Try again in 15 minutes.", 429);
   recent.push(now); otpAttempts.set(email, recent);
   if (process.env.NODE_ENV === "production") return fail(res, "Email delivery is not configured. Contact the portal administrator.", 503);
-  const otp = process.env.DEV_OTP || String(crypto.randomInt(100000, 1000000)); otpStore.set(email, { otp, expires: now + 5 * 60 * 1000 });
+  const otp = process.env.DEV_OTP || "123456"; otpStore.set(email, { otp, expires: now + 5 * 60 * 1000 });
   res.json({ message: "Development OTP generated. Configure email delivery before production.", ...(process.env.NODE_ENV !== "production" ? { developmentOtp: otp } : {}) });
 });
 app.post("/api/auth/login", asyncRoute(async (req, res) => {
@@ -299,8 +299,16 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: "The server encountered an unexpected error." });
 });
 
-if (mongoConfigured) mongoose.connect(mongoUri).then(async () => {
+if (mongoConfigured) mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 5000 }).then(async () => {
   if (await Item.estimatedDocumentCount() === 0) await Item.insertMany(seeds);
   app.listen(port, () => console.log(`FindHub API listening on ${port} (MongoDB)`));
-}).catch((error) => { console.error("MongoDB connection failed:", error.message); process.exit(1); });
+}).catch((error) => {
+  if (process.env.NODE_ENV === "production") {
+    console.error("MongoDB connection failed:", error.message);
+    process.exit(1);
+  }
+  mongoConfigured = false;
+  console.warn(`MongoDB connection failed; using memory demo mode: ${error.message}`);
+  app.listen(port, () => console.log(`FindHub API listening on ${port} (memory demo mode)`));
+});
 else app.listen(port, () => console.log(`FindHub API listening on ${port} (memory demo mode; set MONGODB_URI to persist data)`));
