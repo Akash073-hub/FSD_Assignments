@@ -56,6 +56,7 @@ npm start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in a browser. The development server reloads when source files change.
+`npm run dev` is also available as an alias for `npm start`.
 
 ### Start the Express API
 
@@ -69,6 +70,7 @@ npm run dev
 ```
 
 The API runs at `http://localhost:5000`. Set `MONGODB_URI` and a stable, random `JWT_SECRET` in `backend/.env`. Without `MONGODB_URI`, the server uses temporary in-memory demo data, which is cleared when it stops. The React app uses `http://localhost:5000/api` by default; set `REACT_APP_API_URL` before building to change it.
+In development, clicking **Send OTP** fills `123456`; keep the API running in the second terminal to complete login.
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
